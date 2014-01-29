@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shining the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-01-28T17:00:23.628Z</updated>
+  <updated>2014-01-29T05:03:14.923Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -15,11 +15,32 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[「鹦鹉螺号」退役]]></title>
+    <link href="http://blog.phoenixlzx.com/2014/01/29/nautilus-retired/"/>
+    <id>http://blog.phoenixlzx.com/2014/01/29/nautilus-retired/</id>
+    <published>2014-01-29T04:22:59.000Z</published>
+    <updated>2014-01-29T05:03:11.000Z</updated>
+    <content type="html"><![CDATA[<p>收到了ResellerClub的来信。</p>
+<p><a href="http://www.seainsight.me" target="_blank">鹦鹉螺号</a> 域名就要到期了。2012年2月19日注册，到现在也就是2年的时间。170余篇文章，说实话没多少是自己的。</p>
+<p>自从加入 ResellerClub 以来，又做了Hexonet的代理。域名、数字证书、服务器，基本上想做个网站或者什么Web服务，找我可以一条龙搞定了。总有人这么说，你赚了不少钱吧。每到这时候我都只能摇头苦笑——扣掉各种手续费，一个域名一年有3块5块的利润就很不错了...</p>
+<p>2013年下半年到2014年初的财务状况一直比较紧张。因为不满学校食堂的猪饲料(一盘菜可以倒出一锅油，还不是啥好油)，一直带着jojo在外面吃，每天光吃饭就要花掉几十块大洋。服务器机房网络总是抽风，无奈在猫菊苣的各种诱惑下一狠心买了服务器托管到MultaCOM机房。Minecraft服务器和二小姐的合并又折腾了好一阵，买服务器、寄去托管什么的。还得感谢happyaron童鞋省掉了我一大笔托管的费用。萌DNS最一开始也只是想自己弄两台NS服务器用用，后来慢慢变成了多用户的域名管理平台我还专门写了个管理员页面...所以服务器也不能含糊了，于是一年2k的服务器费用，加上域名和证书的好几百。学期结束的时候突然心血来潮..额，其实也不算，因为X201i的性能是在太差了，<del>蓝光都带不动的说</del> 更别提Minecraft了.. 于是又破费入了一块240G Intel 530 SSD，一块1600×900的14寸高分屏，一只Express转USB3.0的扩展卡准备回家升级T420来用，加起来又近2k了吧。</p>
+<p>为什么非得做不折腾会死星人呢...不作死就不会死，我怎么就不明白这个道理。何弃疗？</p>
+<p>(貌似「何弃疗」这词还是从我母校高中冒出来的？如果我还在郑集中学估计也会放弃治疗参加高考的吧..？)</p>
+<p>所以这一段时间以来都很累...博客只适合记录生活和折腾经历，专门拿来做知识库备忘什么的还是用一个简单的Wiki吧。纠结了一晚，最后还是决定，「鹦鹉螺号」已经没有继续存在的价值了。它的主人已经没有力气再驾驶它驰骋汪洋了，是时候让它停靠休息了。</p>
+<p>虽然只写了一点点，不过还是谨以此文纪念陪伴我2年的鹦鹉螺号吧。(喂！</p>
+]]></content>
+    
+    
+      <category term="Life" scheme="http://blog.phoenixlzx.com/categories/Life/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[再一次开始]]></title>
     <link href="http://blog.phoenixlzx.com/2014/01/02/new-start/"/>
     <id>http://blog.phoenixlzx.com/2014/01/02/new-start/</id>
     <published>2014-01-02T04:02:22.000Z</published>
-    <updated>2014-01-02T09:08:21.000Z</updated>
+    <updated>2014-01-29T04:26:17.000Z</updated>
     <content type="html"><![CDATA[<p>换博客程序的想法早就有了。不愧是不折腾会死星人，一路从 wordpress.com 换到独立的 WordPress 再到 Jekyll，13年8月份的时候还自己写了个博客程序 /w\</p>
 <p>不过无奈自己能力不够，Node.js 写的博客程序也不是那么舒服。WordPress 看过源码之后才发现比自己想象中的复杂得多——不然也不会成为最受欢迎的 CMS+Blog 系统。</p>
 <p>前段时间 <a href="https://plus.google.com/u/0/+BobYuan/" target="_blank">+Bob Yuan</a> 来找我注册域名，我顺便推荐了 Hexo 给他。不过惭愧的是那时候我也没有用过 Hexo... 虽然很想用。2014新年当天晚上在<a href="https://plus.google.com/u/0/103175359999284392656/" target="_blank">少将</a>家和<a href="https://plus.google.com/u/0/+CeeCirno/" target="_blank">C菊</a>，<a href="https://plus.google.com/u/0/+ZhtKannagi/" target="_blank">Zht</a>，<a href="https://plus.google.com/u/0/102594404609241222783/" target="_blank">色枫铃</a>以及<a href="https://plus.google.com/u/0/117271460125855897345/" target="_blank">JOJO</a>一起看红白吃火锅，吃到开心的时候来邮件通知说 MultaCOM 机房的机器上线了要我去配置。</p>
@@ -29,6 +50,8 @@
 <p>嗯.. 于是就这样。</p>
 ]]></content>
     
+    
+      <category term="Life" scheme="http://blog.phoenixlzx.com/categories/Life/"/>
     
   </entry>
   
