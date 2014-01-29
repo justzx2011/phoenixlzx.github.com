@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.phoenixlzx.com/links/index.html</loc>
+    <lastmod>2014-01-28T16:15:25.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://blog.phoenixlzx.com/2014/01/29/nautilus-retired/</loc>
     <lastmod>2014-01-29T04:22:59.000Z</lastmod>
   </url>
@@ -9,11 +14,6 @@
   <url>
     <loc>http://blog.phoenixlzx.com/2014/01/02/new-start/</loc>
     <lastmod>2014-01-02T04:02:22.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://blog.phoenixlzx.com/links/index.html</loc>
-    <lastmod>2014-01-28T16:15:25.000Z</lastmod>
   </url>
   
   <url>
