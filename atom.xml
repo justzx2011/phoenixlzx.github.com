@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shining the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-02-01T13:34:36.339Z</updated>
+  <updated>2014-02-01T13:46:06.153Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.phoenixlzx.com/2014/02/01/simple-steps-with-ubuntu-server/"/>
     <id>http://blog.phoenixlzx.com/2014/02/01/simple-steps-with-ubuntu-server/</id>
     <published>2014-02-01T11:37:34.000Z</published>
-    <updated>2014-02-01T13:34:32.000Z</updated>
+    <updated>2014-02-01T13:45:57.000Z</updated>
     <content type="html"><![CDATA[<p>之前许诺过的... 虽然像装系统一样纯体力活，靠的是经验，没啥技术含量。不过既然答应了，写出来也算是自己 Note 一下。</p>
 <p>本文所有操作均在 Ubuntu 12.04 LTS Server 下测试通过(需要 root 权限)。或者说，已经在无数个 Ubuntu 12.04 LTS Server 下使用过了... Debian 的话，应该大差不差，有些包可能没有或者名称不一样，需要适当做调整。</p>
 <p><strong>注意：如果未声明「新建文件」则只修改对应的行，并非整个配置文件内容。请使用查找功能查找对应变量或语句来完成修改。</strong></p>
@@ -80,6 +80,7 @@ apt-<span class="keyword">get</span> install sshguard
 </pre></td></tr></table></figure>
 
 <p>类似 sshguard 的还有 fail2ban 等。</p>
+<p>如果使用的是 VPS 的话，最重要的——不要忘记更改密码。命令：<code>passwd</code></p>
 <h3 id="step-2-lnmp">Step 2. LNMP</h3>
 <p>很多童鞋买了 VPS 什么的就为了跑一个 WordPress，然后听信传言说什么 LAMP 啊之类的... 我的亲身体会是，在你有足够大的内存之前，Apache 这个东西真的不要碰... 就算我开一台4GB内存的VPS 一样会因为各种原因(包括内存不足) Apache 莫名挂掉。</p>
 <p>安装 LNMP 命令：</p>
@@ -160,6 +161,13 @@ gzip_http_version <span class="number">1.1</span>;
 gzip_types <span class="type">text</span>/plain <span class="type">text</span>/css <span class="type">application</span>/json <span class="type">application</span>/x-javascript <span class="type">text</span>/xml <span class="type">application</span>/xml <span class="type">application</span>/xml+rss <span class="type">text</span>/javascript;
 </pre></td></tr></table></figure>
 
+<h4 id="-postfix">安装 Postfix</h4>
+<p>如果你需要让该服务器上任何程序发邮件的话，除非使用外部SMTP服务器，否则需要一个程序来提供 Sendmail</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>apt-<span class="keyword">get</span> install postfix
+</pre></td></tr></table></figure>
+
+<p>安装过程中会询问 Postfix 的工作环境，这里选择「Internet site」，然后填写自己的域名地址。</p>
 <h3 id="-wordpress">安装 WordPress</h3>
 <p><strong>这里用 WordPress 作为一个样例，其他基于PHP+MySQL的网站程序同理。</strong></p>
 <p>下载最新的简体中文版 WordPress 程序到服务器网站路径(当前版本 3.8.1，网站目录为 /var/www，也可以使用其他较为安全的目录)，并为站点文件设置正确的权限。</p>
