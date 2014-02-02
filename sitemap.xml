@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.phoenixlzx.com/links/index.html</loc>
+    <lastmod>2014-01-28T16:15:25.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://blog.phoenixlzx.com/2014/02/02/respond-for-aaaa-queries-when-ipv4-exists-rather-than-ipv6/</loc>
     <lastmod>2014-02-02T03:55:02.000Z</lastmod>
   </url>
@@ -9,11 +14,6 @@
   <url>
     <loc>http://blog.phoenixlzx.com/2014/02/01/simple-steps-with-ubuntu-server/</loc>
     <lastmod>2014-02-01T11:37:34.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://blog.phoenixlzx.com/links/index.html</loc>
-    <lastmod>2014-01-28T16:15:25.000Z</lastmod>
   </url>
   
   <url>
