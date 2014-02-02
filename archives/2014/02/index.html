@@ -231,7 +231,7 @@ gzip_types <span class="type">text</span>/plain <span class="type">text</span>/c
 </pre></td></tr></table></figure>
 
 <p>安装过程中会询问 Postfix 的工作环境，这里选择「Internet site」，然后填写自己的域名地址。</p>
-<h3 id="-wordpress">安装 WordPress</h3>
+<h3 id="step-3-wordpress">Step 3. 安装 WordPress</h3>
 <p><strong>这里用 WordPress 作为一个样例，其他基于PHP+MySQL的网站程序同理。</strong></p>
 <p>下载最新的简体中文版 WordPress 程序到服务器网站路径(当前版本 3.8.1，网站目录为 /var/www，也可以使用其他较为安全的目录)，并为站点文件设置正确的权限。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -352,7 +352,7 @@ exit
 
 <p>这样我们就得到了一个数据库名为 <code>wordpress</code>，以及一个拥有权限的用户 <code>wordpress</code> 及其密码 <code>YourStrongPassWordHereLoL</code>。</p>
 <p>此时如果你的域名已经正确配置并解析，访问你的域名将看到 WordPress 的安装向导。使用上面的数据库连接信息即可完成安装。</p>
-<h3 id="-node-js">配置 Node.js</h3>
+<h3 id="step-4-node-js">Step 4. 配置 Node.js</h3>
 <p>Node.js 越来越火爆了。咱也是 Node.js developer (作死自大一回..) 不过对于更多用户来讲，Node.js 的吸引力在于大量方便的Web应用。<del>比如末影袜</del></p>
 <p>Ubuntu 12.04 的 Node 版本还是 0.6.x 真是不能忍。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
