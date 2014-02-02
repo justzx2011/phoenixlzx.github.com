@@ -108,7 +108,7 @@
 	...
 </pre></td></tr></table></figure>
 
-<p>一个简单的改动，没做什么测试就提交了。测试时发现 Google DNS 等缓存DNS给<code>AAAA</code>查询返回了<code>SERVFAIL</code>...</p>
+<p>一个简单的改动，没做什么测试就提交了。然后发现 Google DNS 等缓存DNS给<code>AAAA</code>查询返回了<code>SERVFAIL</code>...</p>
 <p><code>dig +trace</code> 查了下发现死循环了... 再去看 RFC 同时用猫的 NS 服务器做了测试，发现对于这种情况，返回的记录是 Authority 部分 SOA，其他全部是空，格式和 <code>NXDOMAIN</code> 一样，只不过RCODE是 <code>NOERROR</code> 而已。</p>
 <p>嘛。commit #<a href="https://github.com/phoenixlzx/minimoedns/commit/5f50bbaa89ac7b51259aeaaa54b08d65476300da" target="_blank"><code>5f50bbaa89</code></a></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
