@@ -302,6 +302,11 @@ gzip_types <span class="type">text</span>/plain <span class="type">text</span>/c
 </pre></td></tr></table></figure>
 
 <p>保存，把配置文件链接到 NGINX 的网站配置目录</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>ln <span class="attribute">-s</span> /etc/nginx/sites<span class="attribute">-available</span>/wordpress<span class="built_in">.</span>conf /etc/nginx/sites<span class="attribute">-enabled</span><span class="subst">/</span>
+</pre></td></tr></table></figure>
+
+<p>重启 NGINX</p>
 <p><strong>注意</strong> 如果是较新的 NGINX 版本，要同时侦听 IPv4 和 IPv6，需要在默认服务器配置，一般来说是在 <code>/etc/nginx/sites_enabled/default</code> 这个文件中定义的(其实就是 listen 后面带有 default_server 的站点配置文件)，<code>listen</code> 部分改为</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>listen <span class="attr_selector">[::]</span><span class="value">:<span class="number">80</span> default_server ipv6only=off;</span>
@@ -313,11 +318,6 @@ gzip_types <span class="type">text</span>/plain <span class="type">text</span>/c
 </pre></td></tr></table></figure>
 
 <p>即可。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>ln <span class="attribute">-s</span> /etc/nginx/sites<span class="attribute">-available</span>/wordpress<span class="built_in">.</span>conf /etc/nginx/sites<span class="attribute">-enabled</span><span class="subst">/</span>
-</pre></td></tr></table></figure>
-
-<p>重启 NGINX</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>service nginx restart
 </pre></td></tr></table></figure>
