@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shining the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-02-06T08:58:28.384Z</updated>
+  <updated>2014-02-06T09:00:46.048Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.phoenixlzx.com/2014/02/06/a-new-expjs-for-mypet-using-fastfibo/"/>
     <id>http://blog.phoenixlzx.com/2014/02/06/a-new-expjs-for-mypet-using-fastfibo/</id>
     <published>2014-02-06T08:15:44.000Z</published>
-    <updated>2014-02-06T08:58:15.000Z</updated>
+    <updated>2014-02-06T09:00:42.000Z</updated>
     <content type="html"><![CDATA[<p>今天开始陆续得到玩家的反馈表示 MyPet 技能树坏掉了.. 不过 Hexadecimal 这次提交的技能树多了好多种，而且设定最高等级100级，确实很难写...或者说.. 写完了估计会累死什么的...</p>
 <p>所以更好的办法就是更改升级算法。MyPet 给出的 <a href="https://github.com/xXKeyleXx/MyPet/blob/master/experience-scripts/exp.js" target="_blank">exp.js</a> 实在是让人看不懂，而且相当不好用。</p>
 <p>如果说有比较方便的递增数列，那么数得上斐波那契数列了吧～于是用斐波那契数列写了一个 exp.js。算法是从别处抄来的，<del>反正是比递归快多了</del></p>
@@ -132,7 +132,8 @@
 }
 </pre></td></tr></table></figure>
 
-<p>坑人之处在于，如果不按照这个格式来写，就会直接报错，类似 <code>Cannot convert null to int</code> 之类的。不过我在管理组里发了这段js之后就被二小姐和静琴狠狠的鄙视了——原因，二小姐说：「你那程序会让CPU君愉快的死一死的喵～」</p>
+<p>坑人之处在于，如果不按照这个格式来写，就会直接报错，类似 <code>Cannot convert null to int</code> 之类的。另外真心觉得java写的东西都渣爆了... 还是java这个语言渣爆了...以至于我不敢写 <code>var fibs = [0, 1]</code> 这样的语句我怕 rhino 不识别。</p>
+<p>不过我在管理组里发了这段js之后就被二小姐和静琴狠狠的鄙视了——原因，二小姐说：「你那程序会让CPU君愉快的死一死的喵～」</p>
 <p>所以再来贴静琴的 exp.js</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
