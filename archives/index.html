@@ -73,6 +73,230 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-02-06T08:15:44.000Z"><a href="/2014/02/06/a-new-expjs-for-mypet-using-fastfibo/">2014-02-06</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/06/a-new-expjs-for-mypet-using-fastfibo/">基于斐波那契数列给 MyPet 写了新的 exp.js</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>今天开始陆续得到玩家的反馈表示 MyPet 技能树坏掉了.. 不过 Hexadecimal 这次提交的技能树多了好多种，而且设定最高等级100级，确实很难写...或者说.. 写完了估计会累死什么的...</p>
+<p>所以更好的办法就是更改升级算法。MyPet 给出的 <a href="https://github.com/xXKeyleXx/MyPet/blob/master/experience-scripts/exp.js" target="_blank">exp.js</a> 实在是让人看不懂，而且相当不好用。</p>
+<p>如果说有比较方便的递增数列，那么数得上斐波那契数列了吧～于是用斐波那契数列写了一个 exp.js。算法是从别处抄来的，<del>反正是比递归快多了</del></p>
+<p>文件 exp.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+</pre></td><td class="code"><pre><span class="comment">// fibo exp.js by phoenixlzx</span>
+
+<span class="function"><span class="keyword">function</span> <span class="title">calculate</span><span class="params">(exp)</span> {</span>
+    <span class="keyword">var</span> level = <span class="number">0</span>;
+    <span class="keyword">var</span> requiredExp = <span class="number">0</span>;
+    <span class="keyword">var</span> currentExp = <span class="number">0</span>;
+
+    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="built_in">Math</span>.floor(exp); i++) {
+	<span class="keyword">if</span> (<span class="built_in">Math</span>.floor(exp) &lt;= fastfibo(i)) {
+		level = i;
+		requiredExp = fastfibo(level + <span class="number">1</span>);
+		currentExp = fastfibo(level);
+		<span class="keyword">break</span>;
+	}
+    }
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Array</span>(level, requiredExp, currentExp);
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">fastfibo</span><span class="params">(n)</span> {</span>
+
+    <span class="keyword">var</span> fibs = <span class="keyword">new</span> <span class="built_in">Array</span>();
+
+    fibs.push(<span class="number">0</span>);
+    fibs.push(<span class="number">1</span>);
+    
+    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;= n; i++) {
+      fibs.push(fibs[<span class="number">0</span>] + fibs[<span class="number">1</span>]);
+      fibs.shift();
+    }
+    
+    <span class="keyword">return</span> fibs[<span class="number">0</span>] + <span class="number">10</span>;
+}
+
+<span class="comment">//   |------------------|</span>
+<span class="comment">//   |  Return Methods  |</span>
+<span class="comment">//   |------------------|</span>
+
+
+<span class="function"><span class="keyword">function</span> <span class="title">getRequiredExp</span><span class="params">(exp, mypet)</span> {</span>
+    <span class="keyword">return</span> calculate(exp)[<span class="number">1</span>];
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">getLevel</span><span class="params">(exp, mypet)</span> {</span>
+    <span class="keyword">return</span> calculate(exp)[<span class="number">0</span>];
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">getCurrentExp</span><span class="params">(exp, mypet)</span> {</span>
+    <span class="keyword">return</span> calculate(exp)[<span class="number">2</span>];
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">getExpByLevel</span><span class="params">(level, mypet)</span> {</span>
+    <span class="keyword">return</span> fastfibo(level);
+}
+</pre></td></tr></table></figure>
+
+<p>坑人之处在于，如果不按照这个格式来写，就会直接报错，类似 <code>Cannot convert null to int</code> 之类的。不过我在管理组里发了这段js之后就被二小姐和静琴狠狠的鄙视了——原因，二小姐说：「你那程序会让CPU君愉快的死一死的喵～」</p>
+<p>所以再来贴静琴的 exp.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="code"><pre><span class="comment">// Copyright 2014 Jingqin Lynn</span>
+<span class="comment">// MyPet exp.js</span>
+
+<span class="keyword">var</span> phi = (<span class="number">1</span> + <span class="built_in">Math</span>.sqrt(<span class="number">5</span>)) / <span class="number">2</span>;
+<span class="keyword">var</span> fib = <span class="function"><span class="keyword">function</span> <span class="params">(n)</span> {</span>
+  <span class="keyword">var</span> tmp = (<span class="built_in">Math</span>.pow(phi, n) - <span class="built_in">Math</span>.pow(<span class="number">1</span> - phi, n));
+  <span class="keyword">return</span> <span class="built_in">Math</span>.floor(tmp * <span class="built_in">Math</span>.sqrt(<span class="number">1</span> / <span class="number">5</span>)) | <span class="number">0</span>;
+};
+<span class="keyword">var</span> fibSum = <span class="function"><span class="keyword">function</span> <span class="params">(n)</span> {</span>
+  <span class="keyword">return</span> fib(n + <span class="number">2</span>) - <span class="number">1</span>;
+};
+<span class="keyword">var</span> fibPos = <span class="function"><span class="keyword">function</span> <span class="params">(fn)</span> {</span>
+  <span class="keyword">var</span> tmp = (fn * <span class="built_in">Math</span>.sqrt(<span class="number">5</span>) + <span class="built_in">Math</span>.sqrt(<span class="number">5</span> * fn * fn + <span class="number">4</span>)) / <span class="number">2</span>;
+  <span class="keyword">return</span> <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.log(tmp) / <span class="built_in">Math</span>.log(phi)) | <span class="number">0</span>;
+};
+
+<span class="function"><span class="keyword">function</span> <span class="title">getLevel</span><span class="params">(exp, mypet)</span> {</span>
+  <span class="keyword">return</span> fibPos(exp + <span class="number">2</span>) - <span class="number">2</span>;
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">getRequiredExp</span><span class="params">(exp, mypet)</span> {</span>
+  <span class="keyword">return</span> getExpByLevel(getLevel(exp, mypet) + <span class="number">1</span>) - exp;
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">getCurrentExp</span><span class="params">(exp, mypet)</span> {</span>
+  <span class="keyword">return</span> exp - getExpByLevel(getLevel(exp, mypet));
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">getExpByLevel</span><span class="params">(level, mypet)</span> {</span>
+  <span class="keyword">return</span> fibSum(level) - <span class="number">1</span>;
+}
+</pre></td></tr></table></figure>
+
+<p>连一段exp.js都带 copyright 真是龘龘的作风啊。</p>
+<p>咱真心不懂算法，从小学开始数学一直不及格，咋考上的大学也不知道。大学里教算法和数据结构的老师是学院里最水货老师之一，所以咱到现在也不知道所谓 O(n) 是个什么玩意儿。算法之类的书么怪咱自己笨，就是看不下去。也许咱根本就不适合做程序这条路吧。谁知道呢？我在这上面花费的时间已经太多了，多到我现在没有其他任何技能。否定了这一点，我真的就是废人一个了。</p>
+<p>嘛。抱怨到此为止。咱活这么大了一直被鄙视什么的还不是怪咱脑子笨，又不用功... 后面怎么走，只好努力加油了呗。暂时还不想变成废人的说。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-02-06T03:14:34.000Z"><a href="/2014/02/06/directshare-a-simple-file-sharing-using-direct-http-links/">2014-02-06</a></time>
       
       
@@ -1267,6 +1491,8 @@ n <span class="number">0.10</span><span class="number">.25</span>
   <h3 class="title">分类</h3>
   <ul class="entry">
   
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>1</small></li>
+  
     <li><a href="/categories/Life/">Life</a><small>3</small></li>
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
@@ -1281,7 +1507,7 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Configuration/" style="font-size: NaNpx;">Configuration</a><a href="/tags/DNS/" style="font-size: NaNpx;">DNS</a><a href="/tags/Network/" style="font-size: NaNpx;">Network</a><a href="/tags/Node.js/" style="font-size: NaNpx;">Node.js</a><a href="/tags/Practise/" style="font-size: NaNpx;">Practise</a><a href="/tags/Server/" style="font-size: NaNpx;">Server</a><a href="/tags/Ubuntu/" style="font-size: NaNpx;">Ubuntu</a>
+    <a href="/tags/Algorithm/" style="font-size: NaNpx;">Algorithm</a><a href="/tags/Configuration/" style="font-size: NaNpx;">Configuration</a><a href="/tags/DNS/" style="font-size: NaNpx;">DNS</a><a href="/tags/Fibonacci/" style="font-size: NaNpx;">Fibonacci</a><a href="/tags/Minecraft/" style="font-size: NaNpx;">Minecraft</a><a href="/tags/MyPet/" style="font-size: NaNpx;">MyPet</a><a href="/tags/Network/" style="font-size: NaNpx;">Network</a><a href="/tags/Node.js/" style="font-size: NaNpx;">Node.js</a><a href="/tags/Practise/" style="font-size: NaNpx;">Practise</a><a href="/tags/Server/" style="font-size: NaNpx;">Server</a><a href="/tags/Ubuntu/" style="font-size: NaNpx;">Ubuntu</a>
   </div>
 </div>
 
@@ -1290,6 +1516,10 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/02/06/a-new-expjs-for-mypet-using-fastfibo/">基于斐波那契数列给 MyPet 写了新的 exp.js</a>
+      </li>
     
       <li>
         <a href="/2014/02/06/directshare-a-simple-file-sharing-using-direct-http-links/">Directshare - 一个简单的HTTP直链文件分享工具</a>
@@ -1305,10 +1535,6 @@ n <span class="number">0.10</span><span class="number">.25</span>
     
       <li>
         <a href="/2014/01/31/2014-01-31/">2014-01-31</a>
-      </li>
-    
-      <li>
-        <a href="/2014/01/29/nautilus-retired/">「鹦鹉螺号」退役</a>
       </li>
     
   </ul>
