@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shining the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-02-11T10:16:45.435Z</updated>
+  <updated>2014-02-11T12:17:54.170Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -13,6 +13,114 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[一个简单的 WordPress 备份脚本]]></title>
+    <link href="http://blog.phoenixlzx.com/2014/02/11/a-simple-wordpress-backup-script/"/>
+    <id>http://blog.phoenixlzx.com/2014/02/11/a-simple-wordpress-backup-script/</id>
+    <published>2014-02-11T12:08:56.000Z</published>
+    <updated>2014-02-11T12:17:44.000Z</updated>
+    <content type="html"><![CDATA[<p>居然会有人问我要这个东西... 我最不会写脚本了好吧呀！</p>
+<p><del>真心觉得这货 Google 一下粗来一大坨</del></p>
+<p>嘛不多说了.. 既然写了就发粗来让大家吐槽一下好了...</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="code"><pre><span class="shebang">#!/bin/bash</span>
+<span class="comment"># settings</span>
+mysqldbuser=<span class="string">"wordpress"</span>
+mysqldbpass=<span class="string">"YourMySQLPassword"</span>
+mysqldb=<span class="string">"wordpress"</span>
+webroot=<span class="string">"/var/www/wordpress"</span>
+backuproot=<span class="string">"/root/backup/backups"</span>
+temproot=<span class="string">"/root/backup/temp/`date +%y-%m-%d`"</span>
+temp=<span class="string">"/root/backup/temp"</span>
+logfile=<span class="string">"/root/backup/backup.log"</span>
+
+mkdir -p <span class="variable">$backuproot</span> <span class="variable">$temproot</span>/files
+
+<span class="comment"># backup start</span>
+<span class="built_in">echo</span> <span class="string">"Backup start"</span> &gt;&gt; <span class="variable">$logfile</span>
+<span class="built_in">echo</span> $(date +<span class="string">"%y-%m-%d %H:%M:%S"</span>) &gt;&gt; <span class="variable">$logfile</span> 
+<span class="built_in">echo</span> <span class="string">"------------"</span> &gt;&gt; <span class="variable">$logfile</span>
+
+<span class="comment"># database backup</span>
+<span class="built_in">echo</span> <span class="string">"Dumping MySQL database..."</span> &gt;&gt; <span class="variable">$logfile</span>
+mysqldump --user=<span class="variable">$mysqldbuser</span> --password=<span class="variable">$mysqldbpass</span> --databases <span class="variable">$mysqldb</span> &gt; <span class="variable">$temproot</span>/db.$(date +<span class="string">"%y-%m-%d"</span>).sql
+<span class="built_in">echo</span> <span class="string">"Done exporting database."</span> &gt;&gt; <span class="variable">$logfile</span>
+
+<span class="comment"># copy wordpress files</span>
+<span class="built_in">echo</span> <span class="string">"Copying website files..."</span> &gt;&gt; <span class="variable">$logfile</span>
+cp -r <span class="variable">$webroot</span> <span class="variable">$temproot</span>/files/
+<span class="built_in">echo</span> <span class="string">"Done copying website files."</span> &gt;&gt; <span class="variable">$logfile</span>
+
+<span class="comment"># Compress backup files</span>
+<span class="built_in">echo</span> <span class="string">"Compressing backup files..."</span> &gt;&gt; <span class="variable">$logfile</span>
+<span class="built_in">cd</span> <span class="variable">$temp</span>
+tar zcf <span class="variable">$backuproot</span>/backup-$(date +<span class="string">"%y-%m-%d"</span>).tar.gz $(date +<span class="string">"%y-%m-%d"</span>) &gt;&gt; <span class="variable">$logfile</span>
+<span class="built_in">echo</span> <span class="string">"Backup complete."</span> &gt;&gt; <span class="variable">$logfile</span>
+
+<span class="comment"># Cleanup</span>
+<span class="built_in">echo</span> <span class="string">"Cleaning up..."</span> &gt;&gt; <span class="variable">$logfile</span>
+rm -rf <span class="variable">$temp</span>/* &gt;&gt; <span class="variable">$logfile</span>
+
+<span class="built_in">echo</span> <span class="string">"------------"</span> &gt;&gt; <span class="variable">$logfile</span>
+<span class="built_in">echo</span> &gt;&gt; <span class="variable">$logfile</span>
+</pre></td></tr></table></figure>
+
+<p>真心的没有用到任何... 高级的东西。</p>
+<p>保存为文件 <code>/root/backup.sh</code> 然后修改下前面几个变量，以 root 用户新建 cronjob</p>
+<p><code>crontab -e</code> 然后敲</p>
+<p><code>00    01    *    *    1    /root/backup.sh</code></p>
+<p>保存。这样每周一的凌晨1点(当然是你的服务器时间..) 就会自动备份到 <code>/root/backup/backups</code> 下。懒得写自动删除... 于是手动删好了。</p>
+<p><del>我要是被猫菊苣笑话了某人你可死定了</del></p>
+]]></content>
+    
+    
+      <category term="WordPress" scheme="http://blog.phoenixlzx.com/tags/WordPress/"/>
+    
+      <category term="Server" scheme="http://blog.phoenixlzx.com/tags/Server/"/>
+    
+      <category term="Practise" scheme="http://blog.phoenixlzx.com/categories/Practise/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[为 KDM 和 Ksplash 自定义壁纸]]></title>
