@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     
-    <title>About | Phoenix&#39;s island</title>
+    <title>为 KDM 和 Ksplash 自定义壁纸 | Phoenix&#39;s island</title>
     <meta name="author" content="Phoenix Nemo">
     
     <meta name="description" content="Phoenix&#39;s Blog">
@@ -11,7 +11,7 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <meta property="og:title" content="About"/>
+    <meta property="og:title" content="为 KDM 和 Ksplash 自定义壁纸"/>
     <meta property="og:site_name" content="Phoenix&#39;s island"/>
 
     
@@ -50,31 +50,68 @@
 </nav>
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper"><article class="page">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
   
   <div class="post-content">
     <header>
       
+        <div class="icon"></div>
+        <time datetime="2014-02-11T09:45:36.000Z"><a href="/2014/02/11/custom-wallpaper-for-kdm-and-ksplash/">2014-02-11</a></time>
+      
       
   
-    <h1 class="title">About</h1>
+    <h1 class="title">为 KDM 和 Ksplash 自定义壁纸</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>二次元技术宅一只喵～</p>
-<p>目前苦逼的大三(ಥ_ಥ) <del>连简历都不会写怎么找工作怎么申请研究生啊</del></p>
-<p>Linux/Node.js/ACG</p>
-<p><a href="https://www.archlinuxcn.org" target="_blank">Arch Linux 中文社区</a> | <a href="https://www.ultrakvm.com" target="_blank">UltraKVM</a> | <a href="https://moedns.com" target="_blank">萌DNS</a> | <a href="http://nyaa.cat" target="_blank">Minecraft 喵窝服务器</a></p>
-<p>如无特殊声明，本站所有内容均在 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC-BY-NC 4.0</a> 许可下发布。 </p>
+        <p>嘛非常简单的几个小步骤，不过KDE的KDM和启动屏幕不能直接自定义壁纸确实很讨厌。</p>
+<h3 id="kdm">KDM</h3>
+<p>表示 KDM 相对简单所以先说了。首先是下载对应的 KDM 主题，然后解压到一个临时目录下。</p>
+<p>我下载的是 Glassified，在 <a href="http://kde-look.org/content/show.php/Glassified+Splash?content=84124" target="_blank">kde-look</a> 上非常受欢迎的一款玻璃效果主题。</p>
+<p>Glassified 主题解压后得到了 <code>background.svg</code> 和 <code>glassfied.xml</code> 等等文件。由于我的壁纸是 JPEG 格式而且本机没安装 Inkscape (放心 GIMP 不支持矢量图的...) 所以只好直接把图片切割并缩放为适合我屏幕分辨率的文件放进来，重命名为 <code>background.jpg</code>。因为文件变了，所以打开 <code>glassified.xml</code> 文件，查找 <code>background.svg</code> 并全部替换成 <code>background.jpg</code> <del>其实就替换了一处</del></p>
+<p>接下来返回上级目录，把 <code>Glassified</code> 目录压缩为 <code>.tar.gz</code> 或 <code>.tar.bz2</code> 文件，就可以直接在 KDE 系统设置里安装了。(安装KDM主题需要root权限哦)</p>
+<h3 id="ksplash">KSplash</h3>
+<p>Ksplash 其实也不复杂，就是比较蛋疼的是目录很多，一般自己用的话... 我反正是把和我分辨率靠不着边的目录都删了。一样是下载的 Glassified 主题，解压后得到以分辨率命名的目录，扫了一眼居然没有16:9的分辨率啊啊啊啊！虽然我更喜欢16:10但是这也太蛋疼了吧！</p>
+<p>在 <code>1600x1200</code> 这个目录里找到了所有的文件。其他目录里应该只有 <code>background.png</code> 或者类似的文件。于是进入 <code>1600x1200</code> 这个目录，用博丽灵梦的壁纸覆盖了 <code>background.png</code>。需要注意一点，本本是16:9 1600×900 分辨率的(嗯就是这么奇葩又正常的分辨率) 所以灵梦的壁纸原本是 1600x900，被我缩放成 1600x1200。图片看起来是被压窄了，不过放心——KDE会自动帮你从1600x1200拉伸成适合屏幕分辨率的... 如果放的文件是1600x900或者其他16:9分辨率的话... <del>效果非常鬼畜哦</del></p>
+<p>留给自己用的，所以把其他分辨率的都删掉了。如果想要做来分享，那么还需要把图像文件放缩放成正确的比例和分辨率放在对应的目录下。完成后返回上级目录，像KDM主题一样压缩成 <code>.tar.gz</code> 即可。不需要root权限，可以直接在系统设置里安装。装好了记得测试下哦。</p>
+<p>下面上效果图。</p>
+<p><img src="/static/img/posts/2014-02-11-ksplash.png" alt="KSplash - Hakurei Reimu"></p>
+<p>PS. Glassifed 这款主题的链接貌似死掉好久了。于是顺便附上下载链接好了。Dropbox 访问不能的话.. 嘛我相信大家都有办法的对吧～</p>
+<ul>
+<li><a href="https://dl.dropboxusercontent.com/u/2705405/Glassified.KDM.tar.gz" target="_blank">Glassifed KDM</a></li>
+<li><a href="https://dl.dropboxusercontent.com/u/2705405/Glassified.ksplash.tar.gz" target="_blank">Glassifed KSplash</a></li>
+</ul>
 
       
     </div>
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/Notes/">Notes</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/KDE/">KDE</a>, <a href="/tags/Artwork/">Artwork</a>
+  </div>
+
         
       
       <div class="clearfix"></div>
