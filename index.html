@@ -69,6 +69,198 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-02-17T11:49:22.000Z"><a href="/2014/02/17/file-upload-with-expressjs-and-formidable/">2014-02-17</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/17/file-upload-with-expressjs-and-formidable/">使用 Express.js 和 Formidable 上传文件</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>写 <a href="/2014/02/06/directshare-a-simple-file-sharing-using-direct-http-links/">之前一篇文章</a> 时发现 Express.js 更新到 3.4.x 了，运行的时候出现警告</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="keyword">connect</span>.multipart() will be removed in <span class="keyword">connect</span> <span class="number">3.0</span>
+visit https:<span class="regexp">//github</span>.com/senchalabs/<span class="keyword">connect</span>/wiki/Connect-<span class="number">3.0</span> <span class="keyword">for</span> alternatives
+<span class="keyword">connect</span>.limit() will be removed in <span class="keyword">connect</span> <span class="number">3.0</span>
+</pre></td></tr></table></figure>
+
+<p>按照 Wiki 的指引看了下 <code>multiparty</code>，<code>connect-multiparty</code> 和 <code>formidable</code>，最终选用了 <code>formidable</code> <del>因为说明看起来很碉堡的样子</del></p>
+<p>简单写了两个路由控制，按照 <a href="https://github.com/felixge/node-formidable" target="_blank">node-formidable</a> 的示例加上了打印文件上传信息的几个语句，运行时发现程序 hang 了...</p>
+<p>Google 许久无果——找到的结果基本都是要你注释掉 <code>app.use(express.bodyParser())</code>，而我已经是 express 3.4 所以早就没有 bodyParser 了。回去又看 formidable 给的例子，于是发现自己犯二了...——</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"/upload"</span> <span class="attribute">enctype</span>=<span class="value">"multipart/form-data"</span> <span class="attribute">method</span>=<span class="value">"post"</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>真是个バカ！</p>
+<p>立马给 <code>index.ejs</code> 中的 form 部分加上了 <code>enctype=&quot;multipart/form-data&quot;</code>，重试，成功。 <del>于是就这么解决了</del>(被打飞</p>
+<p>主程序</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+</pre></td><td class="code"><pre><span class="comment">/**
+ * Module dependencies.
+ */</span>
+
+<span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);
+<span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);
+<span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);
+<span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);
+<span class="keyword">var</span> formidable = <span class="built_in">require</span>(<span class="string">'formidable'</span>);
+
+<span class="keyword">var</span> app = express();
+
+<span class="comment">// all environments</span>
+app.set(<span class="string">'port'</span>, process.env.PORT || <span class="number">3000</span>);
+app.set(<span class="string">'views'</span>, path.join(__dirname, <span class="string">'views'</span>));
+app.set(<span class="string">'view engine'</span>, <span class="string">'ejs'</span>);
+app.use(express.favicon());
+app.use(express.logger(<span class="string">'dev'</span>));
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.methodOverride());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, <span class="string">'public'</span>)));
+
+<span class="comment">// development only</span>
+<span class="keyword">if</span> (<span class="string">'development'</span> == app.get(<span class="string">'env'</span>)) {
+  app.use(express.errorHandler());
+}
+
+app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+    res.render(<span class="string">'index'</span>);
+});
+
+app.post(<span class="string">'/upload'</span>, <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+    <span class="keyword">var</span> form = <span class="keyword">new</span> formidable.IncomingForm();
+
+    form.parse(req, <span class="function"><span class="keyword">function</span><span class="params">(err, fields, files)</span> {</span>
+        res.writeHead(<span class="number">200</span>, {<span class="string">'content-type'</span>: <span class="string">'text/plain'</span>});
+        res.write(<span class="string">'received upload:\n\n'</span>);
+        res.end(util.inspect({fields: fields, files: files}));
+    });
+});
+
+http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+  console.log(<span class="string">'Express server listening on port '</span> + app.get(<span class="string">'port'</span>));
+});
+</pre></td></tr></table></figure>
+
+<p>以及一个简单的 <code>index.ejs</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+<span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">title</span>&gt;</span>Upload test<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">'stylesheet'</span> <span class="attribute">href</span>=<span class="value">'/stylesheets/style.css'</span> /&gt;</span>
+<span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+<span class="tag">&lt;<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;<span class="title">h1</span>&gt;</span>Test formidable<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"/upload"</span> <span class="attribute">method</span>=<span class="value">"post"</span> <span class="attribute">enctype</span>=<span class="value">"multipart/form-data"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"textfield"</span>/&gt;</span>
+    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"file"</span> <span class="attribute">name</span>=<span class="value">"file"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">button</span> <span class="attribute">type</span>=<span class="value">"submit"</span>&gt;</span>Upload<span class="tag">&lt;/<span class="title">button</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">form</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>PS. <a href="http://stackoverflow.com/a/5543851" target="_blank">后来发现确实有人遇到这个问题了...</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-02-16T11:19:34.000Z"><a href="/2014/02/16/nyaabot-bot-for-nyaacat-irc/">2014-02-16</a></time>
       
       
@@ -1752,59 +1944,11 @@ n <span class="number">0.10</span><span class="number">.25</span>
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-01-02T04:02:22.000Z"><a href="/2014/01/02/new-start/">2014-01-02</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/01/02/new-start/">再一次开始</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>换博客程序的想法早就有了。不愧是不折腾会死星人，一路从 wordpress.com 换到独立的 WordPress 再到 Jekyll，13年8月份的时候还自己写了个博客程序 /w\</p>
-<p>不过无奈自己能力不够，Node.js 写的博客程序也不是那么舒服。WordPress 看过源码之后才发现比自己想象中的复杂得多——不然也不会成为最受欢迎的 CMS+Blog 系统。</p>
-<p>前段时间 <a href="https://plus.google.com/u/0/+BobYuan/" target="_blank">+Bob Yuan</a> 来找我注册域名，我顺便推荐了 Hexo 给他。不过惭愧的是那时候我也没有用过 Hexo... 虽然很想用。2014新年当天晚上在<a href="https://plus.google.com/u/0/103175359999284392656/" target="_blank">少将</a>家和<a href="https://plus.google.com/u/0/+CeeCirno/" target="_blank">C菊</a>，<a href="https://plus.google.com/u/0/+ZhtKannagi/" target="_blank">Zht</a>，<a href="https://plus.google.com/u/0/102594404609241222783/" target="_blank">色枫铃</a>以及<a href="https://plus.google.com/u/0/117271460125855897345/" target="_blank">JOJO</a>一起看红白吃火锅，吃到开心的时候来邮件通知说 MultaCOM 机房的机器上线了要我去配置。</p>
-<p>当我搞定服务器的时候其他人都吃完收桌子了QAQ 所以只好继续帮客户迁移虚拟机。我自己的服务器也在凤凰城 SecuredServers 机房，所以这次也是顺便一起迁过来。整理了一下，除了自己写的几个 Node.js 程序，也就剩下 <a href="http://www.seainsight.me" target="_blank">鹦鹉螺号</a> 了。写了好长时间的博客，170篇文章全部被 Google 收录。<del>虽然大部分是转载的</del></p>
-<p>果然时间长了就是舍不得扔，平时拿来转载一些好玩的东西也是可以的。何况这里还有一大堆分享的文件以及 List Yo&#39;s files 这等好用的插件在。不过还有不少其他人的 WordPress，看了一圈发现都好久不更新了——而且都是一开始写了两篇后面就再也没更新的。所以就丢在原来的服务器上不管了。至于这个博客，想来想去还是放在 Github 上。一个是 Uptime 一个是 CDN，<del>最重要的是不要钱</del></p>
-<p>于是就趁着复习周刚开始的这几天空闲把这个 Hexo 搞定吧。罗嗦了这么多，估计今天早上想写文章的思路早就不知道丢哪去了。既然有了专门的 WordPress 来做转载记录，那么这里就尽量保证原创吧～代码写了不少了不过一直没想好如何记录学到的很多经验。目测...还是需要个类似知识库的东西啊。好羡慕猫大大的<a href="http://wiki.felixc.at" target="_blank">Felix Wiki</a></p>
-<p>嗯.. 于是就这样。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
+  
+    <a href="/page/2/" class="alignright next">下一页</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
@@ -1849,9 +1993,11 @@ n <span class="number">0.10</span><span class="number">.25</span>
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>3</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>1</small></li>
+  
+    <li><a href="/categories/Node.js/Notes/">Notes</a><small>1</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -1863,7 +2009,7 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DNS/" style="font-size: 10.00px;">DNS</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Minecraft/" style="font-size: 20.00px;">Minecraft</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 20.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DNS/" style="font-size: 10.00px;">DNS</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Minecraft/" style="font-size: 15.00px;">Minecraft</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -1872,6 +2018,10 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/02/17/file-upload-with-expressjs-and-formidable/">使用 Express.js 和 Formidable 上传文件</a>
+      </li>
     
       <li>
         <a href="/2014/02/16/nyaabot-bot-for-nyaacat-irc/">Nyaabot: 为喵窝服务器构建的 IRC 机器人</a>
@@ -1887,10 +2037,6 @@ n <span class="number">0.10</span><span class="number">.25</span>
     
       <li>
         <a href="/2014/02/06/a-new-expjs-for-mypet-using-fastfibo/">基于斐波那契数列给 MyPet 写了新的 exp.js</a>
-      </li>
-    
-      <li>
-        <a href="/2014/02/06/directshare-a-simple-file-sharing-using-direct-http-links/">Directshare - 一个简单的HTTP直链文件分享工具</a>
       </li>
     
   </ul>
