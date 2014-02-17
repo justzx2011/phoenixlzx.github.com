@@ -123,6 +123,7 @@
 </pre></td></tr></table></figure>
 
 <p>看起来都是很好懂的嗯。昨天在配置 CraftIRC 插件的时候撞到一个坑，NickServ 一直报错说参数不完整。调了半天发现是这里的 <code>realName</code> 部分没有填写，于是这次特地写上了注释要求该项必须填写。</p>
+<h3 id="-">帐户验证</h3>
 <p>之后发现木有类似验证帐号的部分。查了下找到了 <a href="https://github.com/martynsmith/node-irc/issues/205" target="_blank">issue #205</a>。原来验证并没有在 IRC RFC 里规定，因此没有包含在库里。嘛好吧，只好自己写了。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
@@ -161,7 +162,8 @@
 </pre></td></tr></table></figure>
 
 <p>嗯现在就是验证字符串... 所以似乎只能在 freenode 上跑，其他 IRC 服务器是不是这样就不知道了。测试了下表示没问题，收到登陆成功的提示了。</p>
-<p>接下来是处理私信。目前不准备做私信支持，所以在收到 pm 的时候直接丢一句话过去就可以了。顺便，可以做成自定义消息的说，于是加上了 <code>messages.js</code> 包含所有的可自定义消息。</p>
+<h3 id="-">消息处理</h3>
+<p>目前不准备做私信支持，所以在收到 pm 的时候直接丢一句话过去就可以了。顺便，可以做成自定义消息的说，于是加上了 <code>messages.js</code> 包含所有的可自定义消息。</p>
 <p>然后是最重要的功能之一——命令。没命令的 bot 不是好 bot 嗯。编写程序时候的想法是命令以特定字符开头，但是后面如何验证，用 Stackoverflow 上扒来的 <code>startsWith</code> 和 <code>endsWith</code> 函数似乎不能做到足够准确，所以暂且用一个字母加参数来作为命令好了。首先想到的命令功能是搜索 Wiki。毕竟 Minecraft 游戏有够复杂即便是老玩家也不一定能记住 Wiki 里的所有内容。这里想要实现的效果是，提交关键字，返回搜索到的页面链接，并发送该页面的内容总结——也就是 Mediawiki 页面的 section 0。</p>
 <p>这里用到了 <code>request</code> 模块，因为 <code>http.get</code> 被弃用且 <code>http.request</code> 说实话用起来比较不爽。<code>request</code> 可以轻松得到页面内容。根据 <a href="http://en.wikipedia.org/w/api.php" target="_blank">Mediawiki API</a> 确定使用如下2个请求参数：</p>
 <ul>
