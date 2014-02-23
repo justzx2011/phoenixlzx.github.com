@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.phoenixlzx.com/2014/02/23/kernel-hook-auto-build-dkms-modules/</loc>
+    <lastmod>2014-02-23T02:39:58.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://blog.phoenixlzx.com/2014/02/19/make-gif-with-ffmpeg/</loc>
     <lastmod>2014-02-19T06:03:05.000Z</lastmod>
   </url>
