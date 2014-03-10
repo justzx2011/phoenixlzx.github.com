@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shine on the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-03-09T13:56:31.602Z</updated>
+  <updated>2014-03-10T03:08:54.534Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.phoenixlzx.com/2014/02/23/kernel-hook-auto-build-dkms-modules/"/>
     <id>http://blog.phoenixlzx.com/2014/02/23/kernel-hook-auto-build-dkms-modules/</id>
     <published>2014-02-23T02:39:58.000Z</published>
-    <updated>2014-02-23T02:48:16.000Z</updated>
+    <updated>2014-03-10T02:47:23.000Z</updated>
     <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support" target="_blank">DKMS</a> 是个好东西，像我们这些喜欢自定义内核的家伙有了 DKMS 之后就不用为各种第三方的内核模组发愁了～</p>
 <p>于是也没看是不是有人做过了(基本上是有人做了吧...) 于是参照 <a href="https://aur.archlinux.org/packages/nvidia-hook/" target="_blank">nvidia-hook</a> 做了一个 <a href="https://aur.archlinux.org/packages/autodkms/" target="_blank">autodkms</a>。</p>
 <p>按照 <a href="https://wiki.archlinux.org/index.php/Dynamic_Kernel_Module_Support" target="_blank">ArchWiki</a>，自动编译所有模组的命令是：</p>
@@ -58,6 +58,61 @@ HELPEOF
 
 <p>全部源码在<a href="https://github.com/phoenixlzx/autodkms" target="_blank">这里</a> <del>其实一共就几行...</del></p>
 <p>打包好之后在 <code>/etc/mkinitcpio.conf</code> 的 <code>HOOKS</code> 最后加上 <code>autodkms</code> 就可以在更新内核的时候重新编译所有模组啦。</p>
+<p>=== 2014-03-10 更新 ===</p>
+<p>在没有装对应内核的 headers 之前脚本执行会出错——</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>Building dkms modules <span class="keyword">for</span> <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts kernel...
+<span class="keyword">Error</span>! echo
+Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at
+/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.
+<span class="keyword">Error</span>! echo
+Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at
+/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.
+Build complete.
+</pre></td></tr></table></figure>
+
+<p>但是一般升级的时候都是先装内核再装 headers 所以脚本可以完善下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="function"><span class="title">build</span></span> ()
+{
+  <span class="keyword">if</span> [ ! <span class="operator">-d</span> <span class="string">"/usr/lib/modules/<span class="variable">${KERNELVERSION}</span>/build"</span> ]; <span class="keyword">then</span>
+    <span class="built_in">echo</span> <span class="string">"You need to install or update <span class="variable">${KERNELVERSION}</span> headers before build kernel image."</span>
+    <span class="keyword">exit</span> <span class="number">1</span>
+  <span class="keyword">fi</span>
+  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span>
+  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span>
+  <span class="built_in">echo</span> <span class="string">"Build complete."</span>
+}
+
+<span class="function"><span class="title">help</span></span> ()
+{
+cat&lt;&lt;HELPEOF
+    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.
+HELPEOF
+</pre></td></tr></table></figure>
+
 ]]></content>
     
     
