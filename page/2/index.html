@@ -69,6 +69,223 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-02-02T03:55:02.000Z"><a href="/2014/02/02/respond-for-aaaa-queries-when-ipv4-exists-rather-than-ipv6/">2014-02-02</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/02/respond-for-aaaa-queries-when-ipv4-exists-rather-than-ipv6/">IPv4 存在而 IPv6 不存在时对于 AAAA 记录查询的响应</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>昨天收到了仙子酱 forward 给我的来自 prosody 开发者的回复，关于 Google 无法连接到 <code>talk.archlinuxcn.org</code> 的问题。开发者指出是 DNS 响应不规范，在 IPv4 存在而 IPv6 不存在时，如果首先查询 <code>AAAA</code> 记录而得到了 <code>NXDOMAIN</code>，则会停止继续查询记录。</p>
+<p>根据 <a href="http://www.ietf.org/rfc/rfc4074.txt" target="_blank">RFC 4074</a>，在 IPv4 存在而 IPv6 不存在时，对于 <code>AAAA</code> 记录的响应 RCODE 应为<code>0</code>，即 <code>NOERROR</code> 而不是 <code>NXDOMAIN</code>。</p>
+<p>根据RFC的说明对略萌DNS的程序做了部分修改，commit #<a href="https://github.com/phoenixlzx/minimoedns/commit/a5a81172d5b4ab0fee375a70b7065883ff0fbc97" target="_blank"><code>a5a81172d5</code></a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>connection.query(<span class="string">'SELECT * from `records` WHERE `paused` IS NOT TRUE AND `name` = ? AND (`type` = "A" OR `type` = "AAAA" OR `type` = "CNAME")'</span>,
+    name,
+    <span class="function"><span class="keyword">function</span><span class="params">(err, result)</span> {</span>
+      <span class="keyword">if</span> (err) { 
+	  ...
+</pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>result.forEach(<span class="function"><span class="keyword">function</span><span class="params">(record)</span> {</span>
+    <span class="keyword">switch</span> (record.type) {
+	<span class="keyword">case</span> <span class="string">"A"</span>: 
+	<span class="keyword">break</span>;
+	<span class="keyword">case</span> <span class="string">"AAAA"</span>:
+	...
+</pre></td></tr></table></figure>
+
+<p>一个简单的改动，没做什么测试就提交了。然后发现 Google DNS 等缓存DNS给<code>AAAA</code>查询返回了<code>SERVFAIL</code>...</p>
+<p><code>dig +trace</code> 查了下发现死循环了... 再去看 RFC 同时用猫的 NS 服务器做了测试，发现对于这种情况，返回的记录是 Authority 部分 SOA，其他全部是空，格式和 <code>NXDOMAIN</code> 一样，只不过RCODE是 <code>NOERROR</code> 而已。</p>
+<p>嘛。commit #<a href="https://github.com/phoenixlzx/minimoedns/commit/5f50bbaa89ac7b51259aeaaa54b08d65476300da" target="_blank"><code>5f50bbaa89</code></a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="keyword">case</span> <span class="string">"A"</span>:
+    <span class="keyword">var</span> content = SOAresult[<span class="number">0</span>].content.split(<span class="string">" "</span>);
+    response.authority.push(dns.SOA({
+	name: SOAresult[<span class="number">0</span>].name,
+	primary: content[<span class="number">0</span>],
+	admin: content[<span class="number">1</span>].replace(<span class="string">"@"</span>, <span class="string">"."</span>),
+	serial: content[<span class="number">2</span>],
+	refresh: content[<span class="number">3</span>],
+	retry: content[<span class="number">4</span>],
+	expiration: content[<span class="number">5</span>],
+	minimum: content[<span class="number">6</span>],
+	ttl: SOAresult[<span class="number">0</span>].ttl||config.defaultTTL
+    }));
+    response.header.rcode = consts.NAME_TO_RCODE.NOERROR;
+    <span class="keyword">return</span> response.send();
+    <span class="keyword">break</span>;
+</pre></td></tr></table></figure>
+
+<p>然后发现把 <code>case &quot;A&quot;</code> 写到前面不对... 然后把这段改到了 <code>case &quot;AAAA&quot;</code> 和 <code>case &quot;CNAME&quot;</code> 后面，另外在 MySQL 模块中也做了修改，防止在有 IPv6 时返回 IPv4。咱基本不会写 SQL 于是做了两步查询。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre>exports.queryAAAA = <span class="function"><span class="keyword">function</span><span class="params">(name, callback)</span> {</span>
+    pool.getConnection(<span class="function"><span class="keyword">function</span><span class="params">(err, connection)</span> {</span>
+        <span class="keyword">if</span> (err) {
+            console.log(err.message);
+        }
+        connection.query(<span class="string">'SELECT * from `records` WHERE `paused` IS NOT TRUE AND `name` = ? AND (`type` = "AAAA" OR `type` = "CNAME")'</span>,
+            name,
+            <span class="function"><span class="keyword">function</span><span class="params">(err, result)</span> {</span>
+                <span class="keyword">if</span> (err) {
+                    connection.release();
+                    <span class="keyword">return</span> callback(err, <span class="literal">null</span>);
+                }
+                <span class="keyword">if</span> (result[<span class="number">0</span>]) {
+                    connection.release();
+                    callback(<span class="literal">null</span>, result);
+                } <span class="keyword">else</span> {
+                    connection.query(<span class="string">'SELECT * from `records` WHERE `paused` IS NOT TRUE AND `name` = ? AND `type` = "A"'</span>,
+                        name,
+                        <span class="function"><span class="keyword">function</span><span class="params">(err, resultA)</span> {</span>
+                            <span class="keyword">if</span> (err) {
+                                connection.release();
+                                <span class="keyword">return</span> callback(err, <span class="literal">null</span>);
+                            }
+                            connection.release();
+                            callback(<span class="literal">null</span>, resultA);
+                        });
+                }
+            });
+    });
+}
+</pre></td></tr></table></figure>
+
+<p>看起来处理的有点 ugly 不过咱才疏学浅只好先这样了。 commit 之后所有略萌DNS节点更新，于是再次查询就正常了w</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre>~&gt; dig <span class="at_rule">@<span class="number">8.8</span>.<span class="number">8.8</span><span class="preprocessor"> talk.archlinuxcn.org</span><span class="preprocessor"> AAAA</span>
+
+;</span> &lt;&lt;&gt;&gt; DiG 9<span class="class">.9</span><span class="class">.2-P2</span> &lt;&lt;&gt;&gt; <span class="at_rule">@<span class="number">8.8</span>.<span class="number">8.8</span><span class="preprocessor"> talk.archlinuxcn.org</span><span class="preprocessor"> AAAA</span>
+;</span> (1 server found)
+;; global options<span class="value">: +cmd
+;</span>; Got answer<span class="value">:
+;</span>; -&gt;&gt;<span class="tag">HEADER</span>&lt;&lt;- opcode<span class="value">: QUERY, status: NOERROR, id: <span class="number">26181</span>
+;</span>; flags<span class="value">: qr rd ra;</span> QUERY<span class="value">: <span class="number">1</span>, ANSWER: <span class="number">0</span>, AUTHORITY: <span class="number">1</span>, ADDITIONAL: <span class="number">1</span>
+
+;</span>; OPT PSEUDOSECTION<span class="value">:
+;</span> EDNS<span class="value">: version: <span class="number">0</span>, flags:;</span> udp<span class="value">: <span class="number">512</span>
+;</span>; QUESTION <span class="tag">SECTION</span><span class="value">:
+;</span>talk<span class="class">.archlinuxcn</span><span class="class">.org</span>.          IN      AAAA
+
+;; AUTHORITY <span class="tag">SECTION</span><span class="value">:
+archlinuxcn.org.        <span class="number">1800</span>    IN      SOA     ns1.moedns.net. admin.moedns.com. <span class="number">1391266676</span> <span class="number">3600</span> <span class="number">360</span> <span class="number">1209600</span> <span class="number">180</span>
+
+;</span>; Query <span class="tag">time</span><span class="value">: <span class="number">224</span> msec
+;</span>; SERVER<span class="value">: <span class="number">8.8</span>.<span class="number">8.8</span><span class="hexcolor">#53</span>(<span class="number">8.8</span>.<span class="number">8.8</span>)
+;</span>; WHEN<span class="value">: Sun Feb  <span class="number">2</span> <span class="number">12</span>:<span class="number">23</span>:<span class="number">18</span> <span class="number">2014</span>
+;</span>; MSG SIZE  rcvd<span class="value">: <span class="number">115</span></span>
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-02-01T11:37:34.000Z"><a href="/2014/02/01/simple-steps-with-ubuntu-server/">2014-02-01</a></time>
       
       
@@ -607,7 +824,7 @@ n <span class="number">0.10</span><span class="number">.25</span>
   
     <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>3</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>4</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -619,7 +836,7 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 10.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 10.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 10.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 15.00px;">Minecraft</a><a href="/tags/Multimedia/" style="font-size: 10.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 10.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 15.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 10.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 15.00px;">Minecraft</a><a href="/tags/Multimedia/" style="font-size: 10.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 20.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -628,6 +845,10 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a>
+      </li>
     
       <li>
         <a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a>
@@ -643,10 +864,6 @@ n <span class="number">0.10</span><span class="number">.25</span>
     
       <li>
         <a href="/2014/02/17/file-upload-with-expressjs-and-formidable/">使用 Express.js 和 Formidable 上传文件</a>
-      </li>
-    
-      <li>
-        <a href="/2014/02/16/nyaabot-bot-for-nyaacat-irc/">Nyaabot: 为喵窝服务器构建的 IRC 机器人</a>
       </li>
     
   </ul>
