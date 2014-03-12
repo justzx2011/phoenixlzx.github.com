@@ -100,7 +100,7 @@
 
 <p>为</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="subst">--</span><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.2</span>
+</pre></td><td class="code"><pre><span class="subst">--</span><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5301</span>
 </pre></td></tr></table></figure>
 
 <p>以及默认的DNS服务器是 OpenDNS —— 和其他欧美服务一样，节点遍布欧美亚洲就那么可怜的一两个节点，甚至一个节点都没就敢叫遍布全球了呢。所以这里最好能改一下，比如选择日本的OpenNIC节点，这一行最后添加：</p>
@@ -152,7 +152,7 @@ ln -s bogus-nxdomain<span class="preprocessor">.china</span><span class="preproc
 <span class="keyword">no</span>-resolv
 <span class="keyword">no</span>-poll
 <span class="comment"># 添加上游服务器为 DNSCrypt，如果还有其他的 server= 记得取消注释。</span>
-server=<span class="number">127.0</span>.<span class="number">0</span>.<span class="number">2</span>
+server=<span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span><span class="comment">#5301</span>
 <span class="comment"># 在所有网卡上关闭 DHCP，用不着这个功能。如果有多个网卡那么一行一个。</span>
 <span class="keyword">no</span>-dhcp-interface=eth<span class="number">0</span>
 <span class="comment"># 添加自定义 hosts 文件</span>
