@@ -103,7 +103,7 @@
 <p>需要：<code>dnsmasq</code> 和 <code>dnscrypt-proxy</code></p>
 <p>前者在几乎所有的发行版里都有，直接装就行了。后者需要添加第三方源。如果是 Ubuntu 的话可以添加 <code>ppa:shnatsel/dnscrypt</code> 仓库然后安装这个包。</p>
 <h3 id="dnscrypt-">DNSCrypt 配置</h3>
-<p>默认的话安装的 dnscrypt-proxy 是侦听于 <code>127.0.0.1</code> 的 <code>53</code> 端口，也就是本地DNS服务器。这里需要让 DNSMasq 来作为上游服务器所以需要修改配置。文件：<code>/etc/default/dnscrypt-proxy</code></p>
+<p>默认的话安装的 dnscrypt-proxy 是侦听于 <code>127.0.0.2</code> 的 <code>53</code> 端口，这里需要让 DNSMasq 来作为上游服务器所以需要修改配置。文件：<code>/etc/default/dnscrypt-proxy</code></p>
 <p>修改 </p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.2</span>:<span class="number">53</span>
