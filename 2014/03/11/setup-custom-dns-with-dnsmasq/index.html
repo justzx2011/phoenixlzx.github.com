@@ -103,21 +103,24 @@
 <p>需要：<code>dnsmasq</code> 和 <code>dnscrypt-proxy</code></p>
 <p>前者在几乎所有的发行版里都有，直接装就行了。后者需要添加第三方源。如果是 Ubuntu 的话可以添加 <code>ppa:shnatsel/dnscrypt</code> 仓库然后安装这个包。</p>
 <h3 id="dnscrypt-">DNSCrypt 配置</h3>
-<p>默认的话安装的 dnscrypt-proxy 是侦听于 <code>127.0.0.1</code> 的 <code>53</code> 端口，也就是本地DNS服务器。这里需要让 DNSMasq 来作为上游服务器所以需要修改配置。文件：<code>/etc/init/dnscrypt-proxy.conf</code></p>
-<p>找到 <code>exec /usr/sbin/dnscrypt-proxy</code> 开始的一行(一般是最后一行也是最长的一行)</p>
+<p>默认的话安装的 dnscrypt-proxy 是侦听于 <code>127.0.0.1</code> 的 <code>53</code> 端口，也就是本地DNS服务器。这里需要让 DNSMasq 来作为上游服务器所以需要修改配置。文件：<code>/etc/default/dnscrypt-proxy</code></p>
 <p>修改 </p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="subst">--</span><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>
+</pre></td><td class="code"><pre><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">53</span>
 </pre></td></tr></table></figure>
 
 <p>为</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="subst">--</span><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5301</span>
+</pre></td><td class="code"><pre><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5301</span>
 </pre></td></tr></table></figure>
 
-<p>以及默认的DNS服务器是 OpenDNS —— 和其他欧美服务一样，节点遍布欧美亚洲就那么可怜的一两个节点，甚至一个节点都没就敢叫遍布全球了呢。所以这里最好能改一下，比如选择日本的OpenNIC节点，这一行最后添加：</p>
+<p>以及默认的DNS服务器是 OpenDNS —— 和其他欧美服务一样，节点遍布欧美亚洲就那么可怜的一两个节点，甚至一个节点都没就敢叫遍布全球了呢。所以这里最好能改一下，比如选择日本的OpenNIC节点。配置文件里添加(原本是有 OpenDNS 注释的，无视即可)</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>-<span class="ruby">-resolver-address=<span class="number">106.186</span>.<span class="number">17.181</span><span class="symbol">:</span><span class="number">2053</span>  --provider-name=<span class="number">2</span>.dnscrypt-cert.ns2.jp.dns.opennic.glue --provider-key=<span class="number">8768</span><span class="symbol">:C3DB</span><span class="symbol">:F70A</span><span class="symbol">:FBC6</span><span class="symbol">:</span><span class="number">3</span><span class="constant">B64:</span><span class="number">8630</span><span class="symbol">:</span><span class="number">8167</span><span class="symbol">:</span><span class="number">2</span><span class="constant">FD4:</span><span class="constant">EE6F</span><span class="symbol">:E175</span><span class="symbol">:ECFD</span><span class="symbol">:</span><span class="number">46</span><span class="constant">C9:</span><span class="number">22</span><span class="constant">FC:</span><span class="number">7674</span><span class="symbol">:A1AC</span><span class="symbol">:</span><span class="number">2</span>E2A</span>
+2
+3
+</pre></td><td class="code"><pre>resolver-address=<span class="number">106.186</span>.<span class="number">17.181</span><span class="symbol">:</span><span class="number">2053</span>
+provider-name=<span class="number">2</span>.dnscrypt-cert.ns2.jp.dns.opennic.glue
+provider-key=<span class="number">8768</span><span class="symbol">:C3DB</span><span class="symbol">:F70A</span><span class="symbol">:FBC6</span><span class="symbol">:</span><span class="number">3</span><span class="constant">B64:</span><span class="number">8630</span><span class="symbol">:</span><span class="number">8167</span><span class="symbol">:</span><span class="number">2</span><span class="constant">FD4:</span><span class="constant">EE6F</span><span class="symbol">:E175</span><span class="symbol">:ECFD</span><span class="symbol">:</span><span class="number">46</span><span class="constant">C9:</span><span class="number">22</span><span class="constant">FC:</span><span class="number">7674</span><span class="symbol">:A1AC</span><span class="symbol">:</span><span class="number">2</span>E2A
 </pre></td></tr></table></figure>
 
 <p>更多可用的 DNSCrypt 服务器在 <a href="http://dnscrypt.org/" target="_blank">DNSCrypt主页</a> 可以找到。</p>
@@ -134,9 +137,9 @@
 </pre></td><td class="code"><pre><span class="preprocessor"># 为了方便日后更新，把这个仓库 clone 到本地而不是直接下载。</span>
 git clone https://github<span class="preprocessor">.com</span>/felixonmars/dnsmasq-china-list<span class="preprocessor">.git</span>
 cd dnsmasq-china-list
-<span class="preprocessor"># 创建到 DNSMasq 配置目录的软链接</span>
-ln -s accelerated-domains<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/
-ln -s bogus-nxdomain<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/
+<span class="preprocessor"># 创建到 DNSMasq 配置目录的软链接，当前该目录在 /root/dnsmasq-china-list 下。</span>
+ln -s /root/dnsmasq-china-list/accelerated-domains<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/
+ln -s /root/dnsmasq-china-list/bogus-nxdomain<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/
 </pre></td></tr></table></figure>
 
 <h3 id="-hosts-">一份你懂的hosts和拿来主义</h3>

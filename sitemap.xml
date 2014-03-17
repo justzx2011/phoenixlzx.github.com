@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.phoenixlzx.com/2014/03/11/setup-custom-dns-with-dnsmasq/</loc>
+    <lastmod>2014-03-11T11:24:56.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://blog.phoenixlzx.com/about/index.html</loc>
     <lastmod>2014-01-02T09:11:29.000Z</lastmod>
   </url>
@@ -14,11 +19,6 @@
   <url>
     <loc>http://blog.phoenixlzx.com/2014/02/11/custom-wallpaper-for-kdm-and-ksplash/</loc>
     <lastmod>2014-02-11T09:45:36.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://blog.phoenixlzx.com/2014/03/11/setup-custom-dns-with-dnsmasq/</loc>
-    <lastmod>2014-03-11T11:24:56.000Z</lastmod>
   </url>
   
   <url>
