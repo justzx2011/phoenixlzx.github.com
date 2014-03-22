@@ -110,6 +110,7 @@
 <li>搜索时把 <code>split(querytext)</code> 交给数据库来 <code>find()</code></li>
 </ol>
 <p>由于 Javascript 自带一个超级好用的 <code>String.prototype.split()</code> 方法，所以分字就是 <code>title.split(&quot;&quot;)</code>。 <strong>注意 <code>title.split()</code> 和 <code>title.split(&quot;&quot;)</code> 效果是不一样的哦。</strong></p>
+<p>以及，喵菊说如果用数组的话就不能用 <code>/variable/i</code> 这样的正则来忽略大小写了。所以存进去新index的时候要全部转换成小写，搜索的时候也要转换成小写来实现 Case-insensitive search.</p>
 <p>修改路由函数，添加一个新的属性 <code>searchIndex</code>：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
@@ -131,7 +132,7 @@
     type: req.body.type,
     link: req.body.link,
     downloads: <span class="number">0</span>,
-    searchIndex: req.body.title.split(<span class="string">""</span>)
+    searchIndex: req.body.title.toLowerCase().split(<span class="string">""</span>)
 };
 </pre></td></tr></table></figure>
 
