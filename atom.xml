@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shine on the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-03-25T03:28:37.352Z</updated>
+  <updated>2014-03-25T04:29:30.597Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.phoenixlzx.com/2014/03/25/yet-anothor-better-gif-method/"/>
     <id>http://blog.phoenixlzx.com/2014/03/25/yet-anothor-better-gif-method/</id>
     <published>2014-03-25T03:11:46.000Z</published>
-    <updated>2014-03-25T03:28:25.000Z</updated>
+    <updated>2014-03-25T04:29:14.000Z</updated>
     <content type="html"><![CDATA[<p>之前使用 <a href="http://blog.phoenixlzx.com/2014/02/19/make-gif-with-ffmpeg/">FFmpeg 制作 GIF</a> 被 zyo 吐槽 <a href="https://plus.google.com/107142103119739092775/posts/asBTCqCnP9A" target="_blank">明显的网纹</a>，于是找到了更好的办法。</p>
 <p>需要：FFmpeg 以及 ImageMagick。</p>
 <p>依旧不讨论如何截取/剪裁视频文件的问题。例如我们这里要转换的视频文件为 <code>clip.mp4</code>，首先使用 ffmpeg 转换成一个个的 PNG 文件，保持纵横比，宽为320像素，帧率为20。为防止文件名混乱，先建立一个 <code>png</code> 目录。</p>
@@ -41,7 +41,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 </pre></td><td class="code"><pre>convert -layers Optimize -delay <span class="number">4</span>/<span class="number">100</span> png/output*.png clip.gif
 </pre></td></tr></table></figure>
 
-<p>这样制作出来的 gif 效果就非常赞啦～虽然比之前多了一个步骤，但是确实是制作了更好的gif，是更好的方法。</p>
+<p>这样制作出来的 gif 效果就非常赞啦。虽然比之前多了一个步骤，但是确实是制作了更好的gif，是更好的方法。</p>
 ]]></content>
     
     
