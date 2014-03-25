@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.phoenixlzx.com/2014/03/25/yet-anothor-better-gif-method/</loc>
+    <lastmod>2014-03-25T03:11:46.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://blog.phoenixlzx.com/2014/03/22/chinese-word-split-search-with-mongodb/</loc>
     <lastmod>2014-03-22T05:05:43.000Z</lastmod>
   </url>

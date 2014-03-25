@@ -81,6 +81,71 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-03-25T03:11:46.000Z"><a href="/2014/03/25/yet-anothor-better-gif-method/">2014-03-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/25/yet-anothor-better-gif-method/">制作更好的 GIF: 另一种更好的办法</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>之前使用 <a href="http://blog.phoenixlzx.com/2014/02/19/make-gif-with-ffmpeg/">FFmpeg 制作 GIF</a> 被 zyo 吐槽 <a href="https://plus.google.com/107142103119739092775/posts/asBTCqCnP9A" target="_blank">明显的网纹</a>，于是找到了更好的办法。</p>
+<p>需要：FFmpeg 以及 ImageMagick。</p>
+<p>依旧不讨论如何截取/剪裁视频文件的问题。例如我们这里要转换的视频文件为 <code>clip.mp4</code>，首先使用 ffmpeg 转换成一个个的 PNG 文件，保持纵横比，宽为320像素，帧率为20。为防止文件名混乱，先建立一个 <code>png</code> 目录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>mkdir -p png
+ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="number">1</span> -r <span class="number">20</span> png/output%<span class="number">05</span>d.png
+</pre></td></tr></table></figure>
+
+<p>接下来使用 ImageMagick 的 <code>convert</code> 工具来把 png 连接成 gif。顺便做优化来缩小文件体积。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>convert -layers Optimize png/output*.png clip.gif
+</pre></td></tr></table></figure>
+
+<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank">Google 之发现了问题...</a></p>
+<p>解决方案在<a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank">这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
+<p>所以刚才的命令可以稍微修改下。几次测试后发现对于我的原视频(23fps)，<code>4/100</code> 最合适。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>convert -layers Optimize -delay <span class="number">4</span>/<span class="number">100</span> png/output*.png clip.gif
+</pre></td></tr></table></figure>
+
+<p>这样制作出来的 gif 效果就非常赞啦～虽然比之前多了一个步骤，但是确实是制作了更好的gif，是更好的方法。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-03-22T05:05:43.000Z"><a href="/2014/03/22/chinese-word-split-search-with-mongodb/">2014-03-22</a></time>
       
       
@@ -1155,232 +1220,6 @@ rm -rf <span class="variable">$temp</span>/* &gt;&gt; <span class="variable">$lo
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-02-06T08:15:44.000Z"><a href="/2014/02/06/a-new-expjs-for-mypet-using-fastfibo/">2014-02-06</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/02/06/a-new-expjs-for-mypet-using-fastfibo/">基于斐波那契数列给 MyPet 写了新的 exp.js</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>今天开始陆续得到玩家的反馈表示 MyPet 技能树坏掉了.. 不过 Hexadecimal 这次提交的技能树多了好多种，而且设定最高等级100级，确实很难写...或者说.. 写完了估计会累死什么的...</p>
-<p>所以更好的办法就是更改升级算法。MyPet 给出的 <a href="https://github.com/xXKeyleXx/MyPet/blob/master/experience-scripts/exp.js" target="_blank">exp.js</a> 实在是让人看不懂，而且相当不好用。</p>
-<p>如果说有比较方便的递增数列，那么数得上斐波那契数列了吧～于是用斐波那契数列写了一个 exp.js。算法是从别处抄来的，<del>反正是比递归快多了</del></p>
-<p>特意加了10 这样不会一开始的时候一下子升好几级。不过到20级之后升级就会相当困难了... </p>
-<p>文件 exp.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-</pre></td><td class="code"><pre><span class="comment">// fibo exp.js by phoenixlzx</span>
-
-<span class="function"><span class="keyword">function</span> <span class="title">calculate</span><span class="params">(exp)</span> {</span>
-    <span class="keyword">var</span> level = <span class="number">0</span>;
-    <span class="keyword">var</span> requiredExp = <span class="number">0</span>;
-    <span class="keyword">var</span> currentExp = <span class="number">0</span>;
-
-    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="built_in">Math</span>.floor(exp); i++) {
-	<span class="keyword">if</span> (<span class="built_in">Math</span>.floor(exp) &lt;= fastfibo(i)) {
-		level = i;
-		requiredExp = fastfibo(level + <span class="number">1</span>);
-		currentExp = fastfibo(level);
-		<span class="keyword">break</span>;
-	}
-    }
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Array</span>(level, requiredExp, currentExp);
-}
-
-<span class="function"><span class="keyword">function</span> <span class="title">fastfibo</span><span class="params">(n)</span> {</span>
-
-    <span class="keyword">var</span> fibs = <span class="keyword">new</span> <span class="built_in">Array</span>();
-
-    fibs.push(<span class="number">0</span>);
-    fibs.push(<span class="number">1</span>);
-    
-    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;= n; i++) {
-      fibs.push(fibs[<span class="number">0</span>] + fibs[<span class="number">1</span>]);
-      fibs.shift();
-    }
-    
-    <span class="keyword">return</span> fibs[<span class="number">0</span>] + <span class="number">10</span>;
-}
-
-<span class="comment">//   |------------------|</span>
-<span class="comment">//   |  Return Methods  |</span>
-<span class="comment">//   |------------------|</span>
-
-
-<span class="function"><span class="keyword">function</span> <span class="title">getRequiredExp</span><span class="params">(exp, mypet)</span> {</span>
-    <span class="keyword">return</span> calculate(exp)[<span class="number">1</span>];
-}
-
-<span class="function"><span class="keyword">function</span> <span class="title">getLevel</span><span class="params">(exp, mypet)</span> {</span>
-    <span class="keyword">return</span> calculate(exp)[<span class="number">0</span>];
-}
-
-<span class="function"><span class="keyword">function</span> <span class="title">getCurrentExp</span><span class="params">(exp, mypet)</span> {</span>
-    <span class="keyword">return</span> calculate(exp)[<span class="number">2</span>];
-}
-
-<span class="function"><span class="keyword">function</span> <span class="title">getExpByLevel</span><span class="params">(level, mypet)</span> {</span>
-    <span class="keyword">return</span> fastfibo(level);
-}
-</pre></td></tr></table></figure>
-
-<p>坑人之处在于，如果不按照这个格式来写，就会直接报错，类似 <code>Cannot convert null to int</code> 之类的。另外真心觉得java写的东西都渣爆了... 还是java这个语言渣爆了...以至于我不敢写 <code>var fibs = [0, 1]</code> 这样的语句我怕 rhino 不识别。</p>
-<p>不过我在管理组里发了这段js之后就被二小姐和静琴狠狠的鄙视了——原因，二小姐说：「你那程序会让CPU君愉快的死一死的喵～」</p>
-<p>所以再来贴静琴的 exp.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-</pre></td><td class="code"><pre><span class="comment">// Copyright 2014 Jingqin Lynn</span>
-<span class="comment">// MyPet exp.js</span>
-
-<span class="keyword">var</span> phi = (<span class="number">1</span> + <span class="built_in">Math</span>.sqrt(<span class="number">5</span>)) / <span class="number">2</span>;
-<span class="keyword">var</span> fib = <span class="function"><span class="keyword">function</span> <span class="params">(n)</span> {</span>
-  <span class="keyword">var</span> tmp = (<span class="built_in">Math</span>.pow(phi, n) - <span class="built_in">Math</span>.pow(<span class="number">1</span> - phi, n));
-  <span class="keyword">return</span> <span class="built_in">Math</span>.floor(tmp * <span class="built_in">Math</span>.sqrt(<span class="number">1</span> / <span class="number">5</span>)) | <span class="number">0</span>;
-};
-<span class="keyword">var</span> fibSum = <span class="function"><span class="keyword">function</span> <span class="params">(n)</span> {</span>
-  <span class="keyword">return</span> fib(n + <span class="number">2</span>) - <span class="number">1</span>;
-};
-<span class="keyword">var</span> fibPos = <span class="function"><span class="keyword">function</span> <span class="params">(fn)</span> {</span>
-  <span class="keyword">var</span> tmp = (fn * <span class="built_in">Math</span>.sqrt(<span class="number">5</span>) + <span class="built_in">Math</span>.sqrt(<span class="number">5</span> * fn * fn + <span class="number">4</span>)) / <span class="number">2</span>;
-  <span class="keyword">return</span> <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.log(tmp) / <span class="built_in">Math</span>.log(phi)) | <span class="number">0</span>;
-};
-
-<span class="function"><span class="keyword">function</span> <span class="title">getLevel</span><span class="params">(exp, mypet)</span> {</span>
-  <span class="keyword">return</span> fibPos(exp + <span class="number">2</span>) - <span class="number">2</span>;
-}
-
-<span class="function"><span class="keyword">function</span> <span class="title">getRequiredExp</span><span class="params">(exp, mypet)</span> {</span>
-  <span class="keyword">return</span> getExpByLevel(getLevel(exp, mypet) + <span class="number">1</span>) - exp;
-}
-
-<span class="function"><span class="keyword">function</span> <span class="title">getCurrentExp</span><span class="params">(exp, mypet)</span> {</span>
-  <span class="keyword">return</span> exp - getExpByLevel(getLevel(exp, mypet));
-}
-
-<span class="function"><span class="keyword">function</span> <span class="title">getExpByLevel</span><span class="params">(level, mypet)</span> {</span>
-  <span class="keyword">return</span> fibSum(level) - <span class="number">1</span>;
-}
-</pre></td></tr></table></figure>
-
-<p>连一段exp.js都带 copyright 真是龘龘的作风啊。</p>
-<p>咱真心不懂算法，从小学开始数学一直不及格，咋考上的大学也不知道。大学里教算法和数据结构的老师是学院里最水货老师之一，所以咱到现在也不知道所谓 O(n) 是个什么玩意儿。算法之类的书么怪咱自己笨，就是看不下去。也许咱根本就不适合做程序这条路吧。谁知道呢？我在这上面花费的时间已经太多了，多到我现在没有其他任何技能。否定了这一点，我真的就是废人一个了。</p>
-<p>嘛。抱怨到此为止。咱活这么大了一直被鄙视什么的还不是怪咱脑子笨，又不用功... 后面怎么走，只好努力加油了呗。暂时还不想变成废人的说。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -1436,7 +1275,7 @@ rm -rf <span class="variable">$temp</span>/* &gt;&gt; <span class="variable">$lo
   
     <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>4</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>5</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -1448,7 +1287,7 @@ rm -rf <span class="variable">$temp</span>/* &gt;&gt; <span class="variable">$lo
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 10.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 10.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 10.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 13.33px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 13.33px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 13.33px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -1457,6 +1296,10 @@ rm -rf <span class="variable">$temp</span>/* &gt;&gt; <span class="variable">$lo
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/03/25/yet-anothor-better-gif-method/">制作更好的 GIF: 另一种更好的办法</a>
+      </li>
     
       <li>
         <a href="/2014/03/22/chinese-word-split-search-with-mongodb/">MongoDB 中文分字搜索</a>
@@ -1472,10 +1315,6 @@ rm -rf <span class="variable">$temp</span>/* &gt;&gt; <span class="variable">$lo
     
       <li>
         <a href="/2014/02/23/kernel-hook-auto-build-dkms-modules/">自动编译 DKMS 模组的内核 HOOK</a>
-      </li>
-    
-      <li>
-        <a href="/2014/02/19/make-gif-with-ffmpeg/">使用 FFmpeg 制作 GIF</a>
       </li>
     
   </ul>
