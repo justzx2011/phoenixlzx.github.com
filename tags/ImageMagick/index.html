@@ -109,7 +109,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 </pre></td><td class="code"><pre>convert -layers Optimize png/output*.png clip.gif
 </pre></td></tr></table></figure>
 
-<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank">Google 之发现了问题...</a></p>
+<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank">Google 之发现了问题…</a></p>
 <p>解决方案在<a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank">这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
 <p>所以刚才的命令可以稍微修改下。几次测试后发现对于我的原视频(23fps)，<code>4/100</code> 最合适。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre>1
@@ -184,7 +184,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>3</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>6</small></li>
   
@@ -198,7 +198,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.67px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 16.67px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 16.67px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -207,6 +207,10 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
+      </li>
     
       <li>
         <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
@@ -222,10 +226,6 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
     
       <li>
         <a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a>
       </li>
     
   </ul>

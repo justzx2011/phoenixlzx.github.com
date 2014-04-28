@@ -169,7 +169,7 @@
 }
 </pre></td></tr></table></figure>
 
-<p>新建文档搜索函数。 <strong>坑：如果直接把分好字的数组交给数据库来 find 那么一样是精确匹配的效果。这里应该是我对 MongoDB 还不够熟悉才掉坑里...</strong></p>
+<p>新建文档搜索函数。 <strong>坑：如果直接把分好字的数组交给数据库来 find 那么一样是精确匹配的效果。这里应该是我对 MongoDB 还不够熟悉才掉坑里…</strong></p>
 <p>正确的匹配方法是 <code>db.documents.find({ searchIndex: {$all: splittedTextArray} })</code>。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
@@ -200,7 +200,7 @@
 <p>然后按照主席的要求，写了个脚本来更新之前的数据。方法是将原来的数据全部取出，然后遍历写回的同时添加 <code>searchIndex</code>。看了下原来有的数据大约就100多条，所以直接全部取了没考虑分段的问题嗯。</p>
 <p>据喵菊说，数组处理是 MongoDB 的强项所以非常快～</p>
 <p>整个项目的源码在<a href="https://github.com/DuoHuoStudio/iDocument" target="_blank">这里</a></p>
-<p>修改完毕，测试效果非常赞w 不过就是BAKA的blueed还没写搜索列表页的样式就是了... <del>据说前端苦逼</del></p>
+<p>修改完毕，测试效果非常赞w 不过就是BAKA的blueed还没写搜索列表页的样式就是了… <del>据说前端苦逼</del></p>
 
       
     </div>
@@ -268,7 +268,7 @@
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>3</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>6</small></li>
   
@@ -282,7 +282,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.67px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 16.67px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 16.67px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -291,6 +291,10 @@
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
+      </li>
     
       <li>
         <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
@@ -306,10 +310,6 @@
     
       <li>
         <a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a>
       </li>
     
   </ul>

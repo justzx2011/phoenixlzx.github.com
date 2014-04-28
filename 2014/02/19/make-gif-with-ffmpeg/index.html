@@ -98,14 +98,14 @@
 </pre></td><td class="code"><pre>ffmpeg -i input<span class="preprocessor">.ogg</span> output<span class="preprocessor">.gif</span>
 </pre></td></tr></table></figure>
 
-<p>第一次制作的gif就是这么来的。然后当我试图上传到 Google+ 的时候发现...</p>
+<p>第一次制作的gif就是这么来的。然后当我试图上传到 Google+ 的时候发现…</p>
 <p><strong>区区几百KB的视频片段制作出来的GIF竟然有20M之巨啊！</strong> <del>原视频是1080p 50fps的 flv</del></p>
 <p>于是需要两个参数，一个是缩小分辨率一个是减少帧数。50帧确实少见，但是一般来讲 gif 有15帧左右就比较流畅了。命令</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>ffmpeg <span class="attribute">-i</span> input<span class="built_in">.</span>ogg <span class="attribute">-s</span> <span class="number">640</span>x320 <span class="attribute">-r</span> <span class="number">15</span> output<span class="built_in">.</span>gif
 </pre></td></tr></table></figure>
 
-<p>很多人喜欢把 <code>-r</code> 选项放在前面... 按照某个早就忘记在哪的邮件列表里的说法，<code>-r</code> 放在 <em>输入文件</em> 的 <strong>后面</strong> 才是输出文件的效果。上面的命令出来的结果就是分辨率为<code>640×320</code>，帧率为15的gif了。<code>640x320</code> 中间是小写字母 <code>x</code> <del>别像某人一样特地复制了一份 <code>×</code> 进去...</del></p>
+<p>很多人喜欢把 <code>-r</code> 选项放在前面… 按照某个早就忘记在哪的邮件列表里的说法，<code>-r</code> 放在 <em>输入文件</em> 的 <strong>后面</strong> 才是输出文件的效果。上面的命令出来的结果就是分辨率为<code>640×320</code>，帧率为15的gif了。<code>640x320</code> 中间是小写字母 <code>x</code> <del>别像某人一样特地复制了一份 <code>×</code> 进去…</del></p>
 
       
     </div>
@@ -186,7 +186,7 @@
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>3</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>6</small></li>
   
@@ -200,7 +200,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.67px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 16.67px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 16.67px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -209,6 +209,10 @@
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
+      </li>
     
       <li>
         <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
@@ -224,10 +228,6 @@
     
       <li>
         <a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a>
       </li>
     
   </ul>

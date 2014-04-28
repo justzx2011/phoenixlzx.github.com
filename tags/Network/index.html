@@ -110,6 +110,7 @@
 	  ...
 </pre></td></tr></table></figure>
 
+
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -124,8 +125,8 @@
 	...
 </pre></td></tr></table></figure>
 
-<p>一个简单的改动，没做什么测试就提交了。然后发现 Google DNS 等缓存DNS给<code>AAAA</code>查询返回了<code>SERVFAIL</code>...</p>
-<p><code>dig +trace</code> 查了下发现死循环了... 再去看 RFC 同时用猫的 NS 服务器做了测试，发现对于这种情况，返回的记录是 Authority 部分 SOA，其他全部是空，格式和 <code>NXDOMAIN</code> 一样，只不过RCODE是 <code>NOERROR</code> 而已。</p>
+<p>一个简单的改动，没做什么测试就提交了。然后发现 Google DNS 等缓存DNS给<code>AAAA</code>查询返回了<code>SERVFAIL</code>…</p>
+<p><code>dig +trace</code> 查了下发现死循环了… 再去看 RFC 同时用猫的 NS 服务器做了测试，发现对于这种情况，返回的记录是 Authority 部分 SOA，其他全部是空，格式和 <code>NXDOMAIN</code> 一样，只不过RCODE是 <code>NOERROR</code> 而已。</p>
 <p>嘛。commit #<a href="https://github.com/phoenixlzx/minimoedns/commit/5f50bbaa89ac7b51259aeaaa54b08d65476300da" target="_blank"><code>5f50bbaa89</code></a></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
@@ -161,7 +162,7 @@
     <span class="keyword">break</span>;
 </pre></td></tr></table></figure>
 
-<p>然后发现把 <code>case &quot;A&quot;</code> 写到前面不对... 然后把这段改到了 <code>case &quot;AAAA&quot;</code> 和 <code>case &quot;CNAME&quot;</code> 后面，另外在 MySQL 模块中也做了修改，防止在有 IPv6 时返回 IPv4。咱基本不会写 SQL 于是做了两步查询。</p>
+<p>然后发现把 <code>case &quot;A&quot;</code> 写到前面不对… 然后把这段改到了 <code>case &quot;AAAA&quot;</code> 和 <code>case &quot;CNAME&quot;</code> 后面，另外在 MySQL 模块中也做了修改，防止在有 IPv6 时返回 IPv4。咱基本不会写 SQL 于是做了两步查询。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -336,7 +337,7 @@ archlinuxcn.org.        <span class="number">1800</span>    IN      SOA     ns1.
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>3</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>6</small></li>
   
@@ -350,7 +351,7 @@ archlinuxcn.org.        <span class="number">1800</span>    IN      SOA     ns1.
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.67px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 16.67px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 16.67px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -359,6 +360,10 @@ archlinuxcn.org.        <span class="number">1800</span>    IN      SOA     ns1.
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
+      </li>
     
       <li>
         <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
@@ -374,10 +379,6 @@ archlinuxcn.org.        <span class="number">1800</span>    IN      SOA     ns1.
     
       <li>
         <a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a>
       </li>
     
   </ul>

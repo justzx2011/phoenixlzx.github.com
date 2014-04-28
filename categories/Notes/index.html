@@ -95,8 +95,8 @@
     </header>
     <div class="entry">
       
-        <p>最近状态比较不好... 所以准备拿学校的服务器撒撒气<em>(:з」∠)</em></p>
-<p>吐槽：学校个大土豪，居然用双路 E5-2620 + 16G 内存的服务器，强烈怀疑这服务器上的站加起来不如这俩CPU贵... 另外机器上只有一块 300G 的硬盘 (SAS?) 是什么情况... 以及盗版的 RHEL5 是什么情况... 以及 /opt 分了 236G，rootfs 只有 19G 是要闹哪样...</p>
+        <p>最近状态比较不好… 所以准备拿学校的服务器撒撒气<em>(:з」∠)</em></p>
+<p>吐槽：学校个大土豪，居然用双路 E5-2620 + 16G 内存的服务器，强烈怀疑这服务器上的站加起来不如这俩CPU贵… 另外机器上只有一块 300G 的硬盘 (SAS?) 是什么情况… 以及盗版的 RHEL5 是什么情况… 以及 /opt 分了 236G，rootfs 只有 19G 是要闹哪样…</p>
 <p>于是进入正题。Linux 服务器一般都不安装图形界面，更加节省资源。同时现在也能以每月数十美元的价格租到足够性能和带宽的独立服务器，更何况把任务丢给服务器自动化操作，人的时间便可以节省下来做更重要的事情。</p>
 <p>脚本需要如下软件包：</p>
 <ul>
@@ -186,7 +186,7 @@ mkvmerge -o <span class="variable">$2</span>.mkv <span class="variable">$2</span
 </pre></td></tr></table></figure>
 
 <p><code>transcode.sh</code> 是当前目录下的脚本文件，<code>00004</code> 代表当前目录下的 <code>00004.m2ts</code> 片源，输出文件将是 <code>4.mkv</code>，压缩质量为 <code>18</code>，编码过程使用 20 个线程(服务器一共 12 个核心 24 个线程么我就不客气啦。</p>
-<p>OVA压缩大约使用了不到 20 分钟的时间，最终文件大小不到 500M。看起来效果还可以嗯...</p>
+<p>OVA压缩大约使用了不到 20 分钟的时间，最终文件大小不到 500M。看起来效果还可以嗯…</p>
 <p>参考：</p>
 <ul>
 <li><a href="http://wiki.gentoo.org/wiki/FFmpeg_-_Extract_Blu-Ray_Audio" target="_blank">FFmpeg - Extract Blu-Ray Audio - Gentoo Wiki</a></li>
@@ -249,7 +249,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 </pre></td><td class="code"><pre>convert -layers Optimize png/output*.png clip.gif
 </pre></td></tr></table></figure>
 
-<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank">Google 之发现了问题...</a></p>
+<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank">Google 之发现了问题…</a></p>
 <p>解决方案在<a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank">这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
 <p>所以刚才的命令可以稍微修改下。几次测试后发现对于我的原视频(23fps)，<code>4/100</code> 最合适。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre>1
@@ -300,7 +300,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
     </header>
     <div class="entry">
       
-        <p>一直想写的<a href="https://github.com/phoenixlzx/micromoedns" target="_blank">微萌DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了... 心情有够不爽。所以把自己维护的缓存DNS解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
+        <p>一直想写的<a href="https://github.com/phoenixlzx/micromoedns" target="_blank">微萌DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了… 心情有够不爽。所以把自己维护的缓存DNS解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
 <p>所谓自定义DNS，这里有这么几个功能：</p>
 <ul>
 <li>反DNS污染</li>
@@ -309,10 +309,10 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 <li>解决一些国外DNS被X的问题</li>
 </ul>
 <p>接下来是搭建步骤。</p>
-<h3 id="-">安装基本包</h3>
+<h3 id="安装基本包">安装基本包</h3>
 <p>需要：<code>dnsmasq</code> 和 <code>dnscrypt-proxy</code></p>
 <p>前者在几乎所有的发行版里都有，直接装就行了。后者需要添加第三方源。如果是 Ubuntu 的话可以添加 <code>ppa:shnatsel/dnscrypt</code> 仓库然后安装这个包。</p>
-<h3 id="dnscrypt-">DNSCrypt 配置</h3>
+<h3 id="DNSCrypt_配置">DNSCrypt 配置</h3>
 <p>默认的话安装的 dnscrypt-proxy 是侦听于 <code>127.0.0.2</code> 的 <code>53</code> 端口，这里需要让 DNSMasq 来作为上游服务器所以需要修改配置。文件：<code>/etc/default/dnscrypt-proxy</code></p>
 <p>修改 </p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -335,7 +335,7 @@ provider-key=<span class="number">8768</span><span class="symbol">:C3DB</span><s
 
 <p>更多可用的 DNSCrypt 服务器在 <a href="http://dnscrypt.org/" target="_blank">DNSCrypt主页</a> 可以找到。</p>
 <p>修改好配置文件后保存，重启 dnscrypt 服务。</p>
-<h3 id="-">两个好用的配置文件</h3>
+<h3 id="两个好用的配置文件">两个好用的配置文件</h3>
 <p>要感谢喵菊苣的功劳，我们有两个很方便好用的配置文件来阻止一些国内ISP的DNS污染，以及部分国内站点的加速。</p>
 <p>配置文件地址在<a href="https://github.com/felixonmars/dnsmasq-china-list" target="_blank">这里</a></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -352,16 +352,16 @@ ln -s /root/dnsmasq-china-list/accelerated-domains<span class="preprocessor">.ch
 ln -s /root/dnsmasq-china-list/bogus-nxdomain<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/
 </pre></td></tr></table></figure>
 
-<h3 id="-hosts-">一份你懂的hosts和拿来主义</h3>
+<h3 id="一份你懂的hosts和拿来主义">一份你懂的hosts和拿来主义</h3>
 <p>hosts 神马的最喜欢了。自从有了它，妈妈再也不用担心我上不了 Google+ ~~</p>
 <p>于是这玩意到处都有，找一份你觉得靠谱的，然后保存在一个方便找的目录下。~~注意：不要放在 <code>/etc/dnsmasq.d</code> 下，这里文件位置在 <code>/etc/dns/hosts</code></p>
-<p>实在受不了渣渣 Android 的坑爹于是换了 iPhone 之后，Apple 软件的下载速度其实不比 Android 浪费我的时间少多少。一直以来我自己写 Apple 服务加速配置，通过各种查询 Apple 在 Chinacache 的CDN IP，然后写个简单的脚本保证2000个地址能平均分配到各种线路的IP。不过后来发现这种办法开始行不通了... 于是直接拿别人的来用好了。新建文件： <code>/etc/dnsmasq.d/apple.conf</code> 内容只有一行：</p>
+<p>实在受不了渣渣 Android 的坑爹于是换了 iPhone 之后，Apple 软件的下载速度其实不比 Android 浪费我的时间少多少。一直以来我自己写 Apple 服务加速配置，通过各种查询 Apple 在 Chinacache 的CDN IP，然后写个简单的脚本保证2000个地址能平均分配到各种线路的IP。不过后来发现这种办法开始行不通了… 于是直接拿别人的来用好了。新建文件： <code>/etc/dnsmasq.d/apple.conf</code> 内容只有一行：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>server=/<span class="preprocessor">.apple</span><span class="preprocessor">.com</span>/<span class="number">199.91</span><span class="number">.73</span><span class="number">.222</span>
 </pre></td></tr></table></figure>
 
 <p>在这里要感谢 V2EX 的 DNS 啦～</p>
-<h3 id="-dnsmasq">调教 DNSMasq</h3>
+<h3 id="调教_DNSMasq">调教 DNSMasq</h3>
 <p>一切准备就绪，现在来看 DNSMasq 的配置文件—— <code>/etc/dnsmasq.conf</code></p>
 <p>这里只写修改了的配置，其他的保持默认即可。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -436,14 +436,14 @@ addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span
 </pre></td><td class="code"><pre>ffmpeg -i input<span class="preprocessor">.ogg</span> output<span class="preprocessor">.gif</span>
 </pre></td></tr></table></figure>
 
-<p>第一次制作的gif就是这么来的。然后当我试图上传到 Google+ 的时候发现...</p>
+<p>第一次制作的gif就是这么来的。然后当我试图上传到 Google+ 的时候发现…</p>
 <p><strong>区区几百KB的视频片段制作出来的GIF竟然有20M之巨啊！</strong> <del>原视频是1080p 50fps的 flv</del></p>
 <p>于是需要两个参数，一个是缩小分辨率一个是减少帧数。50帧确实少见，但是一般来讲 gif 有15帧左右就比较流畅了。命令</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>ffmpeg <span class="attribute">-i</span> input<span class="built_in">.</span>ogg <span class="attribute">-s</span> <span class="number">640</span>x320 <span class="attribute">-r</span> <span class="number">15</span> output<span class="built_in">.</span>gif
 </pre></td></tr></table></figure>
 
-<p>很多人喜欢把 <code>-r</code> 选项放在前面... 按照某个早就忘记在哪的邮件列表里的说法，<code>-r</code> 放在 <em>输入文件</em> 的 <strong>后面</strong> 才是输出文件的效果。上面的命令出来的结果就是分辨率为<code>640×320</code>，帧率为15的gif了。<code>640x320</code> 中间是小写字母 <code>x</code> <del>别像某人一样特地复制了一份 <code>×</code> 进去...</del></p>
+<p>很多人喜欢把 <code>-r</code> 选项放在前面… 按照某个早就忘记在哪的邮件列表里的说法，<code>-r</code> 放在 <em>输入文件</em> 的 <strong>后面</strong> 才是输出文件的效果。上面的命令出来的结果就是分辨率为<code>640×320</code>，帧率为15的gif了。<code>640x320</code> 中间是小写字母 <code>x</code> <del>别像某人一样特地复制了一份 <code>×</code> 进去…</del></p>
 
       
     </div>
@@ -497,8 +497,8 @@ visit https:<span class="regexp">//github</span>.com/senchalabs/<span class="key
 </pre></td></tr></table></figure>
 
 <p>按照 Wiki 的指引看了下 <code>multiparty</code>，<code>connect-multiparty</code> 和 <code>formidable</code>，最终选用了 <code>formidable</code> <del>因为说明看起来很碉堡的样子</del></p>
-<p>简单写了两个路由控制，按照 <a href="https://github.com/felixge/node-formidable" target="_blank">node-formidable</a> 的示例加上了打印文件上传信息的几个语句，运行时发现程序 hang 了...</p>
-<p>Google 许久无果——找到的结果基本都是要你注释掉 <code>app.use(express.bodyParser())</code>，而我已经是 express 3.4 所以早就没有 bodyParser 了。回去又看 formidable 给的例子，于是发现自己犯二了...——</p>
+<p>简单写了两个路由控制，按照 <a href="https://github.com/felixge/node-formidable" target="_blank">node-formidable</a> 的示例加上了打印文件上传信息的几个语句，运行时发现程序 hang 了…</p>
+<p>Google 许久无果——找到的结果基本都是要你注释掉 <code>app.use(express.bodyParser())</code>，而我已经是 express 3.4 所以早就没有 bodyParser 了。回去又看 formidable 给的例子，于是发现自己犯二了…——</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"/upload"</span> <span class="attribute">enctype</span>=<span class="value">"multipart/form-data"</span> <span class="attribute">method</span>=<span class="value">"post"</span>&gt;</span>
 </pre></td></tr></table></figure>
@@ -635,7 +635,7 @@ http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span
 <span class="tag">&lt;/<span class="title">html</span>&gt;</span>
 </pre></td></tr></table></figure>
 
-<p>PS. <a href="http://stackoverflow.com/a/5543851" target="_blank">后来发现确实有人遇到这个问题了...</a></p>
+<p>PS. <a href="http://stackoverflow.com/a/5543851" target="_blank">后来发现确实有人遇到这个问题了…</a></p>
 
       
     </div>
@@ -680,14 +680,14 @@ http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span
     <div class="entry">
       
         <p>嘛非常简单的几个小步骤，不过KDE的KDM和启动屏幕不能直接自定义壁纸确实很讨厌。</p>
-<h3 id="kdm">KDM</h3>
+<h3 id="KDM">KDM</h3>
 <p>表示 KDM 相对简单所以先说了。首先是下载对应的 KDM 主题，然后解压到一个临时目录下。</p>
 <p>我下载的是 Glassified，在 <a href="http://kde-look.org/content/show.php/Glassified+Splash?content=84124" target="_blank">kde-look</a> 上非常受欢迎的一款玻璃效果主题。</p>
-<p>Glassified 主题解压后得到了 <code>background.svg</code> 和 <code>glassfied.xml</code> 等等文件。由于我的壁纸是 JPEG 格式而且本机没安装 Inkscape (放心 GIMP 不支持矢量图的...) 所以只好直接把图片切割并缩放为适合我屏幕分辨率的文件放进来，重命名为 <code>background.jpg</code>。因为文件变了，所以打开 <code>glassified.xml</code> 文件，查找 <code>background.svg</code> 并全部替换成 <code>background.jpg</code> <del>其实就替换了一处</del></p>
+<p>Glassified 主题解压后得到了 <code>background.svg</code> 和 <code>glassfied.xml</code> 等等文件。由于我的壁纸是 JPEG 格式而且本机没安装 Inkscape (放心 GIMP 不支持矢量图的…) 所以只好直接把图片切割并缩放为适合我屏幕分辨率的文件放进来，重命名为 <code>background.jpg</code>。因为文件变了，所以打开 <code>glassified.xml</code> 文件，查找 <code>background.svg</code> 并全部替换成 <code>background.jpg</code> <del>其实就替换了一处</del></p>
 <p>接下来返回上级目录，把 <code>Glassified</code> 目录压缩为 <code>.tar.gz</code> 或 <code>.tar.bz2</code> 文件，就可以直接在 KDE 系统设置里安装了。(安装KDM主题需要root权限哦)</p>
-<h3 id="ksplash">KSplash</h3>
-<p>Ksplash 其实也不复杂，就是比较蛋疼的是目录很多，一般自己用的话... 我反正是把和我分辨率靠不着边的目录都删了。一样是下载的 Glassified 主题，解压后得到以分辨率命名的目录，扫了一眼居然没有16:9的分辨率啊啊啊啊！虽然我更喜欢16:10但是这也太蛋疼了吧！</p>
-<p>在 <code>1600x1200</code> 这个目录里找到了所有的文件。其他目录里应该只有 <code>background.png</code> 或者类似的文件。于是进入 <code>1600x1200</code> 这个目录，用博丽灵梦的壁纸覆盖了 <code>background.png</code>。需要注意一点，本本是16:9 1600×900 分辨率的(嗯就是这么奇葩又正常的分辨率) 所以灵梦的壁纸原本是 1600x900，被我缩放成 1600x1200。图片看起来是被压窄了，不过放心——KDE会自动帮你从1600x1200拉伸成适合屏幕分辨率的... 如果放的文件是1600x900或者其他16:9分辨率的话... <del>效果非常鬼畜哦</del></p>
+<h3 id="KSplash">KSplash</h3>
+<p>Ksplash 其实也不复杂，就是比较蛋疼的是目录很多，一般自己用的话… 我反正是把和我分辨率靠不着边的目录都删了。一样是下载的 Glassified 主题，解压后得到以分辨率命名的目录，扫了一眼居然没有16:9的分辨率啊啊啊啊！虽然我更喜欢16:10但是这也太蛋疼了吧！</p>
+<p>在 <code>1600x1200</code> 这个目录里找到了所有的文件。其他目录里应该只有 <code>background.png</code> 或者类似的文件。于是进入 <code>1600x1200</code> 这个目录，用博丽灵梦的壁纸覆盖了 <code>background.png</code>。需要注意一点，本本是16:9 1600×900 分辨率的(嗯就是这么奇葩又正常的分辨率) 所以灵梦的壁纸原本是 1600x900，被我缩放成 1600x1200。图片看起来是被压窄了，不过放心——KDE会自动帮你从1600x1200拉伸成适合屏幕分辨率的… 如果放的文件是1600x900或者其他16:9分辨率的话… <del>效果非常鬼畜哦</del></p>
 <p>留给自己用的，所以把其他分辨率的都删掉了。如果想要做来分享，那么还需要把图像文件放缩放成正确的比例和分辨率放在对应的目录下。完成后返回上级目录，像KDM主题一样压缩成 <code>.tar.gz</code> 即可。不需要root权限，可以直接在系统设置里安装。装好了记得测试下哦。</p>
 <p>下面上效果图。</p>
 <p><img src="/static/img/posts/2014-02-11-ksplash.jpg" alt="KSplash - Hakurei Reimu"></p>
@@ -763,7 +763,7 @@ http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>3</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>6</small></li>
   
@@ -777,7 +777,7 @@ http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.67px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 16.67px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 16.67px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -786,6 +786,10 @@ http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
+      </li>
     
       <li>
         <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
@@ -801,10 +805,6 @@ http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span
     
       <li>
         <a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a>
       </li>
     
   </ul>

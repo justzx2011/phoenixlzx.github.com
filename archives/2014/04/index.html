@@ -85,6 +85,67 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-04-28T04:53:55.000Z"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">2014-04-28</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
+<p>所以躺在床上的时候就考虑了下整体的架构。还是最拿手的 HTTP RESTful API，基本功能的话就是获取字幕和发送弹幕。大致的思路如下。</p>
+<ul>
+<li>客户端打开媒体文件后首先获得文件的 hash。有些播放器自动寻找字幕似乎是通过文件名.. 这样的话我改个名字岂不是彻底失效。不过用 hash 来做检索文件的唯一信息的话，不同压制组放出的同一部片源都会有不同的弹幕… 不过似乎也好，如果压制了字幕进去的话，有些针对字幕君的吐槽啊什么的.. 嘛于是就这样。</li>
+<li>服务端通过文件 hash 值来查找有无已存在的字幕文件。如果找到则直接发送文件给客户端，如果没有则在数据库中创建该条目，并生成新的字幕文件发送给客户端。</li>
+<li>客户端以约定好的数据格式发送弹幕信息。用户友好啊之类的(所见即所得什么的..) 就都是客户端的问题了.. 服务端拿到的应该是处理好的数据。</li>
+<li>服务端接收到新的弹幕后将其存进数据库，并追加到已有字幕文件。这样下次其他客户端再次请求该文件的时候就会看到弹幕。</li>
+</ul>
+<p>…</p>
+<p>剩下的就不知道了，因为上面几条出来之后我就睡着了zzzzZ</p>
+<p>…</p>
+<p>早上翘课写代码这种事情早就习以为常了… 更何况是(我已经不知道该如何吐槽)的老师的上机课….</p>
+<p>基本架构和功能打开 3 小时搞定，之前大概花了将近 1 个小时看 <a href="http://matroska.org/technical/specs/subtitles/ssa.html" target="_blank">SSA/ASS Subtitles</a> 以及 Express 4.x 的文档。因为 <a href="https://github.com/visionmedia/express#quick-start" target="_blank">Express 4.x 开始命令行工具被单独分开</a>，害我半天没找到生成模板的命令… (你丫瞎改啥啊啊啊啊</p>
+<p>编码过程里倒是没遇到啥坑，就是数据处理有点烦。因为没找到啥比较好的 SSA 字幕处理库，生成的时候都是手动处理，各种 <code>+ &#39;\n&#39;</code> 什么的..</p>
+<p>以及，SSA/ASS 字幕的格式特性让 <code>Array.prototype.join</code> 得以利用，省掉不少麻烦。</p>
+<p>于是源码在<a href="https://github.com/phoenixlzx/sublive" target="_blank">这里</a>。在基础架构之上还可以很方便的添加大量其他功能，验证啊什么的.. 顺便我还木有做 POST 数据的检查。这个大概晚些时候会加上。</p>
+<p>四月的荒废状态持续了 27 天宣告结束。嘛，挣脱五月病要感谢星光菊苣、Zht、少将以及 KNA 字幕组的所有小伙伴们 &gt;///&lt; 感谢你们～</p>
+<p>以后要继续加油喵！～</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-04-07T12:54:18.000Z"><a href="/2014/04/07/bdrip-script-for-linux-server/">2014-04-07</a></time>
       
       
@@ -95,8 +156,8 @@
     </header>
     <div class="entry">
       
-        <p>最近状态比较不好... 所以准备拿学校的服务器撒撒气<em>(:з」∠)</em></p>
-<p>吐槽：学校个大土豪，居然用双路 E5-2620 + 16G 内存的服务器，强烈怀疑这服务器上的站加起来不如这俩CPU贵... 另外机器上只有一块 300G 的硬盘 (SAS?) 是什么情况... 以及盗版的 RHEL5 是什么情况... 以及 /opt 分了 236G，rootfs 只有 19G 是要闹哪样...</p>
+        <p>最近状态比较不好… 所以准备拿学校的服务器撒撒气<em>(:з」∠)</em></p>
+<p>吐槽：学校个大土豪，居然用双路 E5-2620 + 16G 内存的服务器，强烈怀疑这服务器上的站加起来不如这俩CPU贵… 另外机器上只有一块 300G 的硬盘 (SAS?) 是什么情况… 以及盗版的 RHEL5 是什么情况… 以及 /opt 分了 236G，rootfs 只有 19G 是要闹哪样…</p>
 <p>于是进入正题。Linux 服务器一般都不安装图形界面，更加节省资源。同时现在也能以每月数十美元的价格租到足够性能和带宽的独立服务器，更何况把任务丢给服务器自动化操作，人的时间便可以节省下来做更重要的事情。</p>
 <p>脚本需要如下软件包：</p>
 <ul>
@@ -186,7 +247,7 @@ mkvmerge -o <span class="variable">$2</span>.mkv <span class="variable">$2</span
 </pre></td></tr></table></figure>
 
 <p><code>transcode.sh</code> 是当前目录下的脚本文件，<code>00004</code> 代表当前目录下的 <code>00004.m2ts</code> 片源，输出文件将是 <code>4.mkv</code>，压缩质量为 <code>18</code>，编码过程使用 20 个线程(服务器一共 12 个核心 24 个线程么我就不客气啦。</p>
-<p>OVA压缩大约使用了不到 20 分钟的时间，最终文件大小不到 500M。看起来效果还可以嗯...</p>
+<p>OVA压缩大约使用了不到 20 分钟的时间，最终文件大小不到 500M。看起来效果还可以嗯…</p>
 <p>参考：</p>
 <ul>
 <li><a href="http://wiki.gentoo.org/wiki/FFmpeg_-_Extract_Blu-Ray_Audio" target="_blank">FFmpeg - Extract Blu-Ray Audio - Gentoo Wiki</a></li>
@@ -259,7 +320,7 @@ mkvmerge -o <span class="variable">$2</span>.mkv <span class="variable">$2</span
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>3</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>6</small></li>
   
@@ -273,7 +334,7 @@ mkvmerge -o <span class="variable">$2</span>.mkv <span class="variable">$2</span
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.67px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 16.67px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 16.67px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -282,6 +343,10 @@ mkvmerge -o <span class="variable">$2</span>.mkv <span class="variable">$2</span
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
+      </li>
     
       <li>
         <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
@@ -297,10 +362,6 @@ mkvmerge -o <span class="variable">$2</span>.mkv <span class="variable">$2</span
     
       <li>
         <a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a>
       </li>
     
   </ul>

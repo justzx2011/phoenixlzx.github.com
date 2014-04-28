@@ -95,10 +95,10 @@
     </header>
     <div class="entry">
       
-        <p>之前许诺过的... 虽然像装系统一样纯体力活，靠的是经验，没啥技术含量。不过既然答应了，写出来也算是自己 Note 一下。</p>
-<p>本文所有操作均在 Ubuntu 12.04 LTS Server 下测试通过(需要 root 权限)。或者说，已经在无数个 Ubuntu 12.04 LTS Server 下使用过了... Debian 的话，应该大差不差，有些包可能没有或者名称不一样，需要适当做调整。</p>
+        <p>之前许诺过的… 虽然像装系统一样纯体力活，靠的是经验，没啥技术含量。不过既然答应了，写出来也算是自己 Note 一下。</p>
+<p>本文所有操作均在 Ubuntu 12.04 LTS Server 下测试通过(需要 root 权限)。或者说，已经在无数个 Ubuntu 12.04 LTS Server 下使用过了… Debian 的话，应该大差不差，有些包可能没有或者名称不一样，需要适当做调整。</p>
 <p><strong>注意：如果未声明「新建文件」则只修改对应的行，并非整个配置文件内容。请使用查找功能查找对应变量或语句来完成修改。</strong></p>
-<h3 id="step-1-ssh-">Step 1. SSH 基本配置</h3>
+<h3 id="Step_1-_SSH_基本配置">Step 1. SSH 基本配置</h3>
 <p>不管是独立服务器还是 VPS，SSH 都是远程管理利器。一般 VPS 是通过操作系统模板安装，默认允许 root 帐号登录。独立服务器如果是手动安装的系统，大部分情况下禁用了 root 帐号登录。首先我们要配置使用公钥登录，并且在尽可能的情况下禁用 root 登录和密码登录。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -129,7 +129,7 @@ mkdir -p ~/.ssh
 chmod <span class="number">0700</span> ~/.ssh && chmod <span class="number">0600</span> ~/.ssh/authorized_keys
 </pre></td></tr></table></figure>
 
-<p><code>authorized_keys</code> 文件权限不正确的话是不会生效的哦。公钥保存到服务器上之后可以新开一个 ssh session 尝试连接服务器，如果密钥没有密码保护的话，应该直接就进去了。确保配置正确，再退出服务器， <strong>尤其是禁用密码登录后应在结束最后一个 session 前检查是否可以正确登录服务器</strong> ，不然退出来之后很可能别想再连上去了...</p>
+<p><code>authorized_keys</code> 文件权限不正确的话是不会生效的哦。公钥保存到服务器上之后可以新开一个 ssh session 尝试连接服务器，如果密钥没有密码保护的话，应该直接就进去了。确保配置正确，再退出服务器， <strong>尤其是禁用密码登录后应在结束最后一个 session 前检查是否可以正确登录服务器</strong> ，不然退出来之后很可能别想再连上去了…</p>
 <p>在进行接下来的任何操作之前，都要保证这些操作不能被中断。在天朝这种奇葩的网络中，ssh 不被中断除非你是用内网，而且就算你内网也说不定，因为没准哪个装了数字公司家产品的内网机器就会给你来个ARP攻击啊什么的把你的ssh断掉。<del>甚至把你整个网络搞瘫痪</del></p>
 <p>于是—— <a href="http://tmux.sourceforge.net/" target="_blank">Tmux</a> 登场！</p>
 <p>可以首先看一下 Tmux 的<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1" target="_blank">手册</a> 或者简单使用的话掌握如下几个操作：</p>
@@ -156,22 +156,22 @@ apt-<span class="keyword">get</span> install sshguard
 
 <p>类似 sshguard 的还有 fail2ban 等。</p>
 <p>如果使用的是 VPS 的话，最重要的——不要忘记更改密码。命令：<code>passwd</code></p>
-<h3 id="step-2-lnmp">Step 2. LNMP</h3>
-<p>很多童鞋买了 VPS 什么的就为了跑一个 WordPress，然后听信传言说什么 LAMP 啊之类的... 我的亲身体会是，在你有足够大的内存之前，Apache 这个东西真的不要碰... 就算我开一台4GB内存的VPS 一样会因为各种原因(包括内存不足) Apache 莫名挂掉。</p>
+<h3 id="Step_2-_LNMP">Step 2. LNMP</h3>
+<p>很多童鞋买了 VPS 什么的就为了跑一个 WordPress，然后听信传言说什么 LAMP 啊之类的… 我的亲身体会是，在你有足够大的内存之前，Apache 这个东西真的不要碰… 就算我开一台4GB内存的VPS 一样会因为各种原因(包括内存不足) Apache 莫名挂掉。</p>
 <p>安装 LNMP 命令：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>apt<span class="attribute">-get</span> install php5<span class="attribute">-cgi</span> php5<span class="attribute">-mysql</span> php5<span class="attribute">-fpm</span> php5<span class="attribute">-curl</span> php5<span class="attribute">-gd</span> php5<span class="attribute">-idn</span> php<span class="attribute">-pear</span> php5<span class="attribute">-imap</span> php5<span class="attribute">-mcrypt</span> php5<span class="attribute">-mhash</span> php5<span class="attribute">-pspell</span> php5<span class="attribute">-recode</span> php5<span class="attribute">-snmp</span> php5<span class="attribute">-sqlite</span> php5<span class="attribute">-tidy</span> php5<span class="attribute">-xmlrpc</span> php5<span class="attribute">-xsl</span> nginx mysql<span class="attribute">-server</span>
 </pre></td></tr></table></figure>
 
-<p>看起来很长... 其实这一条就基本啥都搞定了的说(</p>
-<p>另外推荐安装 PHP 字节码加速器 XCache，之前折腾 memcached 的时候被猫菊苣吐槽说这货速度不够快于是果断受诱导换了 XCache... 然后确实比 memcached 快多了。</p>
+<p>看起来很长… 其实这一条就基本啥都搞定了的说(</p>
+<p>另外推荐安装 PHP 字节码加速器 XCache，之前折腾 memcached 的时候被猫菊苣吐槽说这货速度不够快于是果断受诱导换了 XCache… 然后确实比 memcached 快多了。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 </pre></td><td class="code"><pre><span class="preprocessor"># 安装 XCache</span>
 apt-<span class="keyword">get</span> install php5-xcache
 </pre></td></tr></table></figure>
 
-<h4 id="-php">配置 PHP</h4>
+<h4 id="配置_PHP">配置 PHP</h4>
 <p>文件 <code>/etc/php5/fpm/php.ini</code></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -200,7 +200,7 @@ listen = /<span class="keyword">var</span>/run/php5-fpm.sock
 pm.max_requests = <span class="number">500</span>
 </pre></td></tr></table></figure>
 
-<h4 id="-nginx">配置 NGINX</h4>
+<h4 id="配置_NGINX">配置 NGINX</h4>
 <p>文件 <code>/etc/nginx/nginx.conf</code></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -236,14 +236,14 @@ gzip_http_version <span class="number">1.1</span>;
 gzip_types <span class="type">text</span>/plain <span class="type">text</span>/css <span class="type">application</span>/json <span class="type">application</span>/x-javascript <span class="type">text</span>/xml <span class="type">application</span>/xml <span class="type">application</span>/xml+rss <span class="type">text</span>/javascript;
 </pre></td></tr></table></figure>
 
-<h4 id="-postfix">安装 Postfix</h4>
+<h4 id="安装_Postfix">安装 Postfix</h4>
 <p>如果你需要让该服务器上任何程序发邮件的话，除非使用外部SMTP服务器，否则需要一个程序来提供 Sendmail</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>apt-<span class="keyword">get</span> install postfix
 </pre></td></tr></table></figure>
 
 <p>安装过程中会询问 Postfix 的工作环境，这里选择「Internet site」，然后填写自己的域名地址。</p>
-<h3 id="step-3-wordpress">Step 3. 安装 WordPress</h3>
+<h3 id="Step_3-_安装_WordPress">Step 3. 安装 WordPress</h3>
 <p><strong>这里用 WordPress 作为一个样例，其他基于PHP+MySQL的网站程序同理。</strong></p>
 <p>下载最新的简体中文版 WordPress 程序到服务器网站路径(当前版本 3.8.1，网站目录为 /var/www，也可以使用其他较为安全的目录)，并为站点文件设置正确的权限。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -364,7 +364,7 @@ exit
 
 <p>这样我们就得到了一个数据库名为 <code>wordpress</code>，以及一个拥有权限的用户 <code>wordpress</code> 及其密码 <code>YourStrongPassWordHereLoL</code>。</p>
 <p>此时如果你的域名已经正确配置并解析，访问你的域名将看到 WordPress 的安装向导。使用上面的数据库连接信息即可完成安装。</p>
-<h3 id="step-4-node-js">Step 4. 配置 Node.js</h3>
+<h3 id="Step_4-_配置_Node-js">Step 4. 配置 Node.js</h3>
 <p>Node.js 越来越火爆了。咱也是 Node.js developer (作死自大一回..) 不过对于更多用户来讲，Node.js 的吸引力在于大量方便的Web应用。<del>比如末影袜</del></p>
 <p>Ubuntu 12.04 的 Node 版本还是 0.6.x 真是不能忍。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -390,7 +390,7 @@ n <span class="number">0.10</span><span class="number">.25</span>
 </pre></td></tr></table></figure>
 
 <p>干啥的我就不多说了。嗯。 <code>-g</code> 表示全局安装，会安装到 <code>/usr/lib/node_modules</code> 下作为可执行程序。</p>
-<h3 id="-">完</h3>
+<h3 id="完">完</h3>
 <p>暂时写这么多。想起来会继续更新下。</p>
 <p>部分内容来源：</p>
 <ul>
@@ -463,7 +463,7 @@ n <span class="number">0.10</span><span class="number">.25</span>
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>3</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>6</small></li>
   
@@ -477,7 +477,7 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.67px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 16.67px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 16.67px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -486,6 +486,10 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
+      </li>
     
       <li>
         <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
@@ -501,10 +505,6 @@ n <span class="number">0.10</span><span class="number">.25</span>
     
       <li>
         <a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a>
       </li>
     
   </ul>

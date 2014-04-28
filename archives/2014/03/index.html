@@ -109,7 +109,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 </pre></td><td class="code"><pre>convert -layers Optimize png/output*.png clip.gif
 </pre></td></tr></table></figure>
 
-<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank">Google 之发现了问题...</a></p>
+<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank">Google 之发现了问题…</a></p>
 <p>解决方案在<a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank">这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
 <p>所以刚才的命令可以稍微修改下。几次测试后发现对于我的原视频(23fps)，<code>4/100</code> 最合适。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre>1
@@ -234,7 +234,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 }
 </pre></td></tr></table></figure>
 
-<p>新建文档搜索函数。 <strong>坑：如果直接把分好字的数组交给数据库来 find 那么一样是精确匹配的效果。这里应该是我对 MongoDB 还不够熟悉才掉坑里...</strong></p>
+<p>新建文档搜索函数。 <strong>坑：如果直接把分好字的数组交给数据库来 find 那么一样是精确匹配的效果。这里应该是我对 MongoDB 还不够熟悉才掉坑里…</strong></p>
 <p>正确的匹配方法是 <code>db.documents.find({ searchIndex: {$all: splittedTextArray} })</code>。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
@@ -265,7 +265,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 <p>然后按照主席的要求，写了个脚本来更新之前的数据。方法是将原来的数据全部取出，然后遍历写回的同时添加 <code>searchIndex</code>。看了下原来有的数据大约就100多条，所以直接全部取了没考虑分段的问题嗯。</p>
 <p>据喵菊说，数组处理是 MongoDB 的强项所以非常快～</p>
 <p>整个项目的源码在<a href="https://github.com/DuoHuoStudio/iDocument" target="_blank">这里</a></p>
-<p>修改完毕，测试效果非常赞w 不过就是BAKA的blueed还没写搜索列表页的样式就是了... <del>据说前端苦逼</del></p>
+<p>修改完毕，测试效果非常赞w 不过就是BAKA的blueed还没写搜索列表页的样式就是了… <del>据说前端苦逼</del></p>
 
       
     </div>
@@ -309,7 +309,7 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
     </header>
     <div class="entry">
       
-        <p>一直想写的<a href="https://github.com/phoenixlzx/micromoedns" target="_blank">微萌DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了... 心情有够不爽。所以把自己维护的缓存DNS解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
+        <p>一直想写的<a href="https://github.com/phoenixlzx/micromoedns" target="_blank">微萌DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了… 心情有够不爽。所以把自己维护的缓存DNS解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
 <p>所谓自定义DNS，这里有这么几个功能：</p>
 <ul>
 <li>反DNS污染</li>
@@ -318,10 +318,10 @@ ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="numbe
 <li>解决一些国外DNS被X的问题</li>
 </ul>
 <p>接下来是搭建步骤。</p>
-<h3 id="-">安装基本包</h3>
+<h3 id="安装基本包">安装基本包</h3>
 <p>需要：<code>dnsmasq</code> 和 <code>dnscrypt-proxy</code></p>
 <p>前者在几乎所有的发行版里都有，直接装就行了。后者需要添加第三方源。如果是 Ubuntu 的话可以添加 <code>ppa:shnatsel/dnscrypt</code> 仓库然后安装这个包。</p>
-<h3 id="dnscrypt-">DNSCrypt 配置</h3>
+<h3 id="DNSCrypt_配置">DNSCrypt 配置</h3>
 <p>默认的话安装的 dnscrypt-proxy 是侦听于 <code>127.0.0.2</code> 的 <code>53</code> 端口，这里需要让 DNSMasq 来作为上游服务器所以需要修改配置。文件：<code>/etc/default/dnscrypt-proxy</code></p>
 <p>修改 </p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -344,7 +344,7 @@ provider-key=<span class="number">8768</span><span class="symbol">:C3DB</span><s
 
 <p>更多可用的 DNSCrypt 服务器在 <a href="http://dnscrypt.org/" target="_blank">DNSCrypt主页</a> 可以找到。</p>
 <p>修改好配置文件后保存，重启 dnscrypt 服务。</p>
-<h3 id="-">两个好用的配置文件</h3>
+<h3 id="两个好用的配置文件">两个好用的配置文件</h3>
 <p>要感谢喵菊苣的功劳，我们有两个很方便好用的配置文件来阻止一些国内ISP的DNS污染，以及部分国内站点的加速。</p>
 <p>配置文件地址在<a href="https://github.com/felixonmars/dnsmasq-china-list" target="_blank">这里</a></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -361,16 +361,16 @@ ln -s /root/dnsmasq-china-list/accelerated-domains<span class="preprocessor">.ch
 ln -s /root/dnsmasq-china-list/bogus-nxdomain<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/
 </pre></td></tr></table></figure>
 
-<h3 id="-hosts-">一份你懂的hosts和拿来主义</h3>
+<h3 id="一份你懂的hosts和拿来主义">一份你懂的hosts和拿来主义</h3>
 <p>hosts 神马的最喜欢了。自从有了它，妈妈再也不用担心我上不了 Google+ ~~</p>
 <p>于是这玩意到处都有，找一份你觉得靠谱的，然后保存在一个方便找的目录下。~~注意：不要放在 <code>/etc/dnsmasq.d</code> 下，这里文件位置在 <code>/etc/dns/hosts</code></p>
-<p>实在受不了渣渣 Android 的坑爹于是换了 iPhone 之后，Apple 软件的下载速度其实不比 Android 浪费我的时间少多少。一直以来我自己写 Apple 服务加速配置，通过各种查询 Apple 在 Chinacache 的CDN IP，然后写个简单的脚本保证2000个地址能平均分配到各种线路的IP。不过后来发现这种办法开始行不通了... 于是直接拿别人的来用好了。新建文件： <code>/etc/dnsmasq.d/apple.conf</code> 内容只有一行：</p>
+<p>实在受不了渣渣 Android 的坑爹于是换了 iPhone 之后，Apple 软件的下载速度其实不比 Android 浪费我的时间少多少。一直以来我自己写 Apple 服务加速配置，通过各种查询 Apple 在 Chinacache 的CDN IP，然后写个简单的脚本保证2000个地址能平均分配到各种线路的IP。不过后来发现这种办法开始行不通了… 于是直接拿别人的来用好了。新建文件： <code>/etc/dnsmasq.d/apple.conf</code> 内容只有一行：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>server=/<span class="preprocessor">.apple</span><span class="preprocessor">.com</span>/<span class="number">199.91</span><span class="number">.73</span><span class="number">.222</span>
 </pre></td></tr></table></figure>
 
 <p>在这里要感谢 V2EX 的 DNS 啦～</p>
-<h3 id="-dnsmasq">调教 DNSMasq</h3>
+<h3 id="调教_DNSMasq">调教 DNSMasq</h3>
 <p>一切准备就绪，现在来看 DNSMasq 的配置文件—— <code>/etc/dnsmasq.conf</code></p>
 <p>这里只写修改了的配置，其他的保持默认即可。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -466,7 +466,7 @@ addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span
 <li><strong>Y</strong> yande.re</li>
 <li><strong>Z</strong> zh.minecraftwiki.net</li>
 </ul>
-<p>发现各种不科学 = =... 而且这也只是我最近的记录而已吧 →_→</p>
+<p>发现各种不科学 = =… 而且这也只是我最近的记录而已吧 →_→</p>
 
       
     </div>
@@ -534,7 +534,7 @@ addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>2</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>3</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>6</small></li>
   
@@ -548,7 +548,7 @@ addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.67px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 13.33px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 16.67px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 13.33px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 16.67px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 16.67px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -557,6 +557,10 @@ addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
+      </li>
     
       <li>
         <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
@@ -572,10 +576,6 @@ addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span
     
       <li>
         <a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a>
       </li>
     
   </ul>

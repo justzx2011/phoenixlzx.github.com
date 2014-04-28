@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     
-    <title>「鹦鹉螺号」退役 | Phoenix&#39;s island</title>
+    <title>SubLive: 本地播放器的弹幕 API 服务器 | Phoenix&#39;s island</title>
     <meta name="author" content="Phoenix Nemo">
     
     <meta name="description" content="Phoenix&#39;s Blog">
@@ -11,7 +11,7 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <meta property="og:title" content="「鹦鹉螺号」退役"/>
+    <meta property="og:title" content="SubLive: 本地播放器的弹幕 API 服务器"/>
     <meta property="og:site_name" content="Phoenix&#39;s island"/>
 
     
@@ -80,24 +80,34 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-01-29T04:22:59.000Z"><a href="/2014/01/29/nautilus-retired/">2014-01-29</a></time>
+        <time datetime="2014-04-28T04:53:55.000Z"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">2014-04-28</a></time>
       
       
   
-    <h1 class="title">「鹦鹉螺号」退役</h1>
+    <h1 class="title">SubLive: 本地播放器的弹幕 API 服务器</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>收到了ResellerClub的来信。</p>
-<p><a href="http://www.seainsight.me" target="_blank">鹦鹉螺号</a> 域名就要到期了。2012年2月19日注册，到现在也就是2年的时间。170余篇文章，说实话没多少是自己的。</p>
-<p>自从加入 ResellerClub 以来，又做了Hexonet的代理。域名、数字证书、服务器，基本上想做个网站或者什么Web服务，找我可以一条龙搞定了。总有人这么说，你赚了不少钱吧。每到这时候我都只能摇头苦笑——扣掉各种手续费，一个域名一年有3块5块的利润就很不错了…</p>
-<p>2013年下半年到2014年初的财务状况一直比较紧张。因为不满学校食堂的猪饲料(一盘菜可以倒出一锅油，还不是啥好油)，一直带着jojo在外面吃，每天光吃饭就要花掉几十块大洋。服务器机房网络总是抽风，无奈在猫菊苣的各种诱惑下一狠心买了服务器托管到MultaCOM机房。Minecraft服务器和二小姐的合并又折腾了好一阵，买服务器、寄去托管什么的。还得感谢happyaron童鞋省掉了我一大笔托管的费用。萌DNS最一开始也只是想自己弄两台NS服务器用用，后来慢慢变成了多用户的域名管理平台我还专门写了个管理员页面…所以服务器也不能含糊了，于是一年2k的服务器费用，加上域名和证书的好几百。学期结束的时候突然心血来潮..额，其实也不算，因为X201i的性能是在太差了，<del>蓝光都带不动的说</del> 更别提Minecraft了.. 于是又破费入了一块240G Intel 530 SSD，一块1600×900的14寸高分屏，一只Express转USB3.0的扩展卡准备回家升级T420来用，加起来又近2k了吧。</p>
-<p>为什么非得做不折腾会死星人呢…不作死就不会死，我怎么就不明白这个道理。何弃疗？</p>
-<p>(貌似「何弃疗」这词还是从我母校高中冒出来的？如果我还在郑集中学估计也会放弃治疗参加高考的吧..？)</p>
-<p>所以这一段时间以来都很累…博客只适合记录生活和折腾经历，专门拿来做知识库备忘什么的还是用一个简单的Wiki吧。纠结了一晚，最后还是决定，「鹦鹉螺号」已经没有继续存在的价值了。它的主人已经没有力气再驾驶它驰骋汪洋了，是时候让它停靠休息了。</p>
-<p>虽然只写了一点点，不过还是谨以此文纪念陪伴我2年的鹦鹉螺号吧。(喂！</p>
+        <p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
+<p>所以躺在床上的时候就考虑了下整体的架构。还是最拿手的 HTTP RESTful API，基本功能的话就是获取字幕和发送弹幕。大致的思路如下。</p>
+<ul>
+<li>客户端打开媒体文件后首先获得文件的 hash。有些播放器自动寻找字幕似乎是通过文件名.. 这样的话我改个名字岂不是彻底失效。不过用 hash 来做检索文件的唯一信息的话，不同压制组放出的同一部片源都会有不同的弹幕… 不过似乎也好，如果压制了字幕进去的话，有些针对字幕君的吐槽啊什么的.. 嘛于是就这样。</li>
+<li>服务端通过文件 hash 值来查找有无已存在的字幕文件。如果找到则直接发送文件给客户端，如果没有则在数据库中创建该条目，并生成新的字幕文件发送给客户端。</li>
+<li>客户端以约定好的数据格式发送弹幕信息。用户友好啊之类的(所见即所得什么的..) 就都是客户端的问题了.. 服务端拿到的应该是处理好的数据。</li>
+<li>服务端接收到新的弹幕后将其存进数据库，并追加到已有字幕文件。这样下次其他客户端再次请求该文件的时候就会看到弹幕。</li>
+</ul>
+<p>…</p>
+<p>剩下的就不知道了，因为上面几条出来之后我就睡着了zzzzZ</p>
+<p>…</p>
+<p>早上翘课写代码这种事情早就习以为常了… 更何况是(我已经不知道该如何吐槽)的老师的上机课….</p>
+<p>基本架构和功能打开 3 小时搞定，之前大概花了将近 1 个小时看 <a href="http://matroska.org/technical/specs/subtitles/ssa.html" target="_blank">SSA/ASS Subtitles</a> 以及 Express 4.x 的文档。因为 <a href="https://github.com/visionmedia/express#quick-start" target="_blank">Express 4.x 开始命令行工具被单独分开</a>，害我半天没找到生成模板的命令… (你丫瞎改啥啊啊啊啊</p>
+<p>编码过程里倒是没遇到啥坑，就是数据处理有点烦。因为没找到啥比较好的 SSA 字幕处理库，生成的时候都是手动处理，各种 <code>+ &#39;\n&#39;</code> 什么的..</p>
+<p>以及，SSA/ASS 字幕的格式特性让 <code>Array.prototype.join</code> 得以利用，省掉不少麻烦。</p>
+<p>于是源码在<a href="https://github.com/phoenixlzx/sublive" target="_blank">这里</a>。在基础架构之上还可以很方便的添加大量其他功能，验证啊什么的.. 顺便我还木有做 POST 数据的检查。这个大概晚些时候会加上。</p>
+<p>四月的荒废状态持续了 27 天宣告结束。嘛，挣脱五月病要感谢星光菊苣、Zht、少将以及 KNA 字幕组的所有小伙伴们 &gt;///&lt; 感谢你们～</p>
+<p>以后要继续加油喵！～</p>
 
       
     </div>
@@ -106,10 +116,15 @@
         
   
   <div class="categories">
-    <a href="/categories/Life/">Life</a>
+    <a href="/categories/Node.js/">Node.js</a>
   </div>
 
         
+  
+  <div class="tags">
+    <a href="/tags/Node.js/">Node.js</a>, <a href="/tags/Anime/">Anime</a>
+  </div>
+
         
       
       <div class="clearfix"></div>
