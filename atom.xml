@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shine on the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-05-07T04:11:41.018Z</updated>
+  <updated>2014-05-07T04:21:47.658Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.phoenixlzx.com/2014/05/07/new-njlug-homepage/"/>
     <id>http://blog.phoenixlzx.com/2014/05/07/new-njlug-homepage/</id>
     <published>2014-05-07T03:46:09.000Z</published>
-    <updated>2014-05-07T04:11:31.000Z</updated>
+    <updated>2014-05-07T04:21:42.000Z</updated>
     <content type="html"><![CDATA[<p>南京 Linux 用户组有一段时间没有聚会了。偶然想起来之前我用 Jekyll 折腾的那个主页，随手敲了主页地址… 啊啦，还基本上没变啊…</p>
 <p>嘛虽然自己写了那么几个东西，不过在组里待了也有一段时间也学到了不少东西。用户对社区的回报应该就在这时候展现出来吧。</p>
 <p>依旧是 Express.js 框架，依旧是 Bootstrap。不过这回不想用数据库了，改用文本存储。除了主页和关于，顺便集成一个 Planet 在里面。RSS feed 的话，除了遍历一遍 upsert (不存在的添加，已存在的跳过)之外没想到什么更好的办法。实际上本来就是 RSS 没必要存储所有的文章，更何况又不是做之前想做的类似 Google Reader 的东西。</p>
@@ -27,6 +27,8 @@
 <p>排序后保存进文件之前和从文件读出之后要有两个 JSON 操作。保存之前 <code>JSON.stringify(posts)</code> 转换成字符串再保存，否则文件里是 <code>[[object Object], [object Object]]</code>。读出来之后 <code>JSON.parse(posts)</code> 再转换成对象数组，否则直接就一字符串没办法处理。</p>
 <p>接下来就是主页和关于。因为不想写用户系统了所以就不发文章了吧… 关于可以是万年不变的页面，首页的话，显示最近的公告好了。最简单的实现就是存两个 markdown 文件然后用 marked 渲染出来插在页面里。</p>
 <p>全部的源码在<a href="https://github.com/phoenixlzx/NJLUG-site" target="_blank">这里</a>。</p>
+<p>目前似乎域名还没解析，田华兄也未必决定用这个.. 所以效果的话戳<a href="http://njlug.phoenixlzx.com" target="_blank">这里</a>看。</p>
+<p>然后顺便说一句.. 现在已经健忘到我已经忘记刚刚想起来要写的东西了<em>(:з」∠)</em></p>
 ]]></content>
     
     
