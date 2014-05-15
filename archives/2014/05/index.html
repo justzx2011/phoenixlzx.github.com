@@ -85,6 +85,117 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-05-15T13:57:19.000Z"><a href="/2014/05/15/accelerate-apple-services-in-cn/">2014-05-15</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/05/15/accelerate-apple-services-in-cn/">为国内用户加速 Apple 服务</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>偶然看到<a href="https://plus.google.com/105938465531761409080/posts/3EXLAUerxMD" target="_blank">雅诗的po</a> 才发觉自己 DNS 的 Apple 服务加速已经几乎不能用了，速度非常慢。倒是挺奇怪的，因为自己做的 DNS 服务器对于整个 Apple 域的上游都是 V2EX DNS，难道是 V2EX DNS 出问题了？</p>
+<p>总之先不管那些。现在来简单做一份 Apple 服务加速的配置。</p>
+<p>稍微 Google 下 Apple 的服务地址，目前获得的地址如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>a{<span class="number">1</span>-<span class="number">2000</span>}<span class="preprocessor">.phobos</span><span class="preprocessor">.apple</span><span class="preprocessor">.com</span>
+swdist<span class="preprocessor">.apple</span><span class="preprocessor">.com</span>
+itunes<span class="preprocessor">.apple</span><span class="preprocessor">.com</span>
+contentdelivery<span class="preprocessor">.itunes</span><span class="preprocessor">.apple</span><span class="preprocessor">.com</span>
+</pre></td></tr></table></figure>
+
+<p>对应在国内的 CDN 地址是</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>a1-a200<span class="preprocessor">.phobos</span><span class="preprocessor">.apple</span><span class="preprocessor">.chinacache</span><span class="preprocessor">.net</span>
+swdist<span class="preprocessor">.apple</span><span class="preprocessor">.ccgslb</span><span class="preprocessor">.net</span>
+itunes<span class="preprocessor">.apple</span><span class="preprocessor">.ccgslb</span><span class="preprocessor">.com</span><span class="preprocessor">.cn</span>
+(最后一个没找到CDN地址..)
+</pre></td></tr></table></figure>
+
+<p>然后根据 114DNS 和 Google DNS 综合查询以上地址的 IP。顺便发现地址里有 <code>cnc</code>, <code>cncssr</code> 这样的关键字，于是正好尝试把 <code>cnc</code> 改成 <code>tel</code> 于是得到了电信节点的 IP。</p>
+<p>现在写一个两句话的 js 脚本来生成一份针对 <code>a{1-2000}.phobos.apple.com</code> 的加速列表。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="comment">// Accelerate IPs for Apple download service.</span>
+<span class="comment">// apple-ips.js</span>
+<span class="keyword">var</span> ips = [
+  <span class="string">'221.192.144.12'</span>,
+  <span class="string">'182.118.46.137'</span>,
+  <span class="string">'124.95.150.148'</span>,
+  <span class="string">'123.235.32.2'</span>,
+  <span class="string">'119.84.69.17'</span>,
+  <span class="string">'122.228.85.196'</span>,
+  <span class="string">'115.231.150.15'</span>,
+  <span class="string">'61.164.153.7'</span>,
+  <span class="string">'183.57.28.18'</span>
+]
+
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">2000</span>; i++) {
+  console.log(ips[<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random()*ips.length)] + <span class="string">' a'</span> + i + <span class="string">'.phobos.apple.com'</span>);
+}
+</pre></td></tr></table></figure>
+
+<p>然后</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>~&gt; node apple-ips<span class="preprocessor">.js</span> &gt; apple<span class="preprocessor">.conf</span>
+</pre></td></tr></table></figure>
+
+<p>就得到一份可以直接用的加速列表啦。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-05-07T03:46:09.000Z"><a href="/2014/05/07/new-njlug-homepage/">2014-05-07</a></time>
       
       
@@ -173,7 +284,7 @@
   
     <li><a href="/categories/Node.js/">Node.js</a><small>4</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>6</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>7</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -185,7 +296,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 10.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 17.50px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 12.50px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 12.50px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 15.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 10.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.50px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 15.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 10.00px;">Network</a><a href="/tags/Node.js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 15.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 10.00px;">Ubuntu</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a>
   </div>
 </div>
 
@@ -194,6 +305,10 @@
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/05/15/accelerate-apple-services-in-cn/">为国内用户加速 Apple 服务</a>
+      </li>
     
       <li>
         <a href="/2014/05/07/new-njlug-homepage/">新的 NJLUG 主站</a>
@@ -209,10 +324,6 @@
     
       <li>
         <a href="/2014/03/25/yet-anothor-better-gif-method/">制作更好的 GIF: 另一种更好的办法</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/22/chinese-word-split-search-with-mongodb/">MongoDB 中文分字搜索</a>
       </li>
     
   </ul>

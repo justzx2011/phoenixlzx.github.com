@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shine on the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-05-07T04:21:47.658Z</updated>
+  <updated>2014-05-15T14:11:00.819Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -13,6 +13,89 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[为国内用户加速 Apple 服务]]></title>
+    <link href="http://blog.phoenixlzx.com/2014/05/15/accelerate-apple-services-in-cn/"/>
+    <id>http://blog.phoenixlzx.com/2014/05/15/accelerate-apple-services-in-cn/</id>
+    <published>2014-05-15T13:57:19.000Z</published>
+    <updated>2014-05-15T14:09:43.000Z</updated>
+    <content type="html"><![CDATA[<p>偶然看到<a href="https://plus.google.com/105938465531761409080/posts/3EXLAUerxMD" target="_blank">雅诗的po</a> 才发觉自己 DNS 的 Apple 服务加速已经几乎不能用了，速度非常慢。倒是挺奇怪的，因为自己做的 DNS 服务器对于整个 Apple 域的上游都是 V2EX DNS，难道是 V2EX DNS 出问题了？</p>
+<p>总之先不管那些。现在来简单做一份 Apple 服务加速的配置。</p>
+<p>稍微 Google 下 Apple 的服务地址，目前获得的地址如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>a{<span class="number">1</span>-<span class="number">2000</span>}<span class="preprocessor">.phobos</span><span class="preprocessor">.apple</span><span class="preprocessor">.com</span>
+swdist<span class="preprocessor">.apple</span><span class="preprocessor">.com</span>
+itunes<span class="preprocessor">.apple</span><span class="preprocessor">.com</span>
+contentdelivery<span class="preprocessor">.itunes</span><span class="preprocessor">.apple</span><span class="preprocessor">.com</span>
+</pre></td></tr></table></figure>
+
+<p>对应在国内的 CDN 地址是</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>a1-a200<span class="preprocessor">.phobos</span><span class="preprocessor">.apple</span><span class="preprocessor">.chinacache</span><span class="preprocessor">.net</span>
+swdist<span class="preprocessor">.apple</span><span class="preprocessor">.ccgslb</span><span class="preprocessor">.net</span>
+itunes<span class="preprocessor">.apple</span><span class="preprocessor">.ccgslb</span><span class="preprocessor">.com</span><span class="preprocessor">.cn</span>
+(最后一个没找到CDN地址..)
+</pre></td></tr></table></figure>
+
+<p>然后根据 114DNS 和 Google DNS 综合查询以上地址的 IP。顺便发现地址里有 <code>cnc</code>, <code>cncssr</code> 这样的关键字，于是正好尝试把 <code>cnc</code> 改成 <code>tel</code> 于是得到了电信节点的 IP。</p>
+<p>现在写一个两句话的 js 脚本来生成一份针对 <code>a{1-2000}.phobos.apple.com</code> 的加速列表。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="comment">// Accelerate IPs for Apple download service.</span>
+<span class="comment">// apple-ips.js</span>
+<span class="keyword">var</span> ips = [
+  <span class="string">'221.192.144.12'</span>,
+  <span class="string">'182.118.46.137'</span>,
+  <span class="string">'124.95.150.148'</span>,
+  <span class="string">'123.235.32.2'</span>,
+  <span class="string">'119.84.69.17'</span>,
+  <span class="string">'122.228.85.196'</span>,
+  <span class="string">'115.231.150.15'</span>,
+  <span class="string">'61.164.153.7'</span>,
+  <span class="string">'183.57.28.18'</span>
+]
+
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">2000</span>; i++) {
+  console.log(ips[<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random()*ips.length)] + <span class="string">' a'</span> + i + <span class="string">'.phobos.apple.com'</span>);
+}
+</pre></td></tr></table></figure>
+
+<p>然后</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>~&gt; node apple-ips<span class="preprocessor">.js</span> &gt; apple<span class="preprocessor">.conf</span>
+</pre></td></tr></table></figure>
+
+<p>就得到一份可以直接用的加速列表啦。</p>
+]]></content>
+    
+    
+      <category term="Configuration" scheme="http://blog.phoenixlzx.com/tags/Configuration/"/>
+    
+      <category term="Notes" scheme="http://blog.phoenixlzx.com/categories/Notes/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[新的 NJLUG 主站]]></title>
@@ -2272,26 +2355,6 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <p>(貌似「何弃疗」这词还是从我母校高中冒出来的？如果我还在郑集中学估计也会放弃治疗参加高考的吧..？)</p>
 <p>所以这一段时间以来都很累…博客只适合记录生活和折腾经历，专门拿来做知识库备忘什么的还是用一个简单的Wiki吧。纠结了一晚，最后还是决定，「鹦鹉螺号」已经没有继续存在的价值了。它的主人已经没有力气再驾驶它驰骋汪洋了，是时候让它停靠休息了。</p>
 <p>虽然只写了一点点，不过还是谨以此文纪念陪伴我2年的鹦鹉螺号吧。(喂！</p>
-]]></content>
-    
-    
-      <category term="Life" scheme="http://blog.phoenixlzx.com/categories/Life/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[再一次开始]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/01/02/new-start/"/>
-    <id>http://blog.phoenixlzx.com/2014/01/02/new-start/</id>
-    <published>2014-01-02T04:02:22.000Z</published>
-    <updated>2014-01-29T04:26:17.000Z</updated>
-    <content type="html"><![CDATA[<p>换博客程序的想法早就有了。不愧是不折腾会死星人，一路从 wordpress.com 换到独立的 WordPress 再到 Jekyll，13年8月份的时候还自己写了个博客程序 /w\</p>
-<p>不过无奈自己能力不够，Node.js 写的博客程序也不是那么舒服。WordPress 看过源码之后才发现比自己想象中的复杂得多——不然也不会成为最受欢迎的 CMS+Blog 系统。</p>
-<p>前段时间 <a href="https://plus.google.com/u/0/+BobYuan/" target="_blank">+Bob Yuan</a> 来找我注册域名，我顺便推荐了 Hexo 给他。不过惭愧的是那时候我也没有用过 Hexo… 虽然很想用。2014新年当天晚上在<a href="https://plus.google.com/u/0/103175359999284392656/" target="_blank">少将</a>家和<a href="https://plus.google.com/u/0/+CeeCirno/" target="_blank">C菊</a>，<a href="https://plus.google.com/u/0/+ZhtKannagi/" target="_blank">Zht</a>，<a href="https://plus.google.com/u/0/102594404609241222783/" target="_blank">色枫铃</a>以及<a href="https://plus.google.com/u/0/117271460125855897345/" target="_blank">JOJO</a>一起看红白吃火锅，吃到开心的时候来邮件通知说 MultaCOM 机房的机器上线了要我去配置。</p>
-<p>当我搞定服务器的时候其他人都吃完收桌子了QAQ 所以只好继续帮客户迁移虚拟机。我自己的服务器也在凤凰城 SecuredServers 机房，所以这次也是顺便一起迁过来。整理了一下，除了自己写的几个 Node.js 程序，也就剩下 <a href="http://www.seainsight.me" target="_blank">鹦鹉螺号</a> 了。写了好长时间的博客，170篇文章全部被 Google 收录。<del>虽然大部分是转载的</del></p>
-<p>果然时间长了就是舍不得扔，平时拿来转载一些好玩的东西也是可以的。何况这里还有一大堆分享的文件以及 List Yo’s files 这等好用的插件在。不过还有不少其他人的 WordPress，看了一圈发现都好久不更新了——而且都是一开始写了两篇后面就再也没更新的。所以就丢在原来的服务器上不管了。至于这个博客，想来想去还是放在 Github 上。一个是 Uptime 一个是 CDN，<del>最重要的是不要钱</del></p>
-<p>于是就趁着复习周刚开始的这几天空闲把这个 Hexo 搞定吧。罗嗦了这么多，估计今天早上想写文章的思路早就不知道丢哪去了。既然有了专门的 WordPress 来做转载记录，那么这里就尽量保证原创吧～代码写了不少了不过一直没想好如何记录学到的很多经验。目测…还是需要个类似知识库的东西啊。好羡慕猫大大的<a href="http://wiki.felixc.at" target="_blank">Felix Wiki</a></p>
-<p>嗯.. 于是就这样。</p>
 ]]></content>
     
     
