@@ -115,7 +115,7 @@ itunes<span class="preprocessor">.apple</span><span class="preprocessor">.ccgslb
 </pre></td></tr></table></figure>
 
 <p>然后根据 114DNS 和 Google DNS 综合查询以上地址的 IP。顺便发现地址里有 <code>cnc</code>, <code>cncssr</code> 这样的关键字，于是正好尝试把 <code>cnc</code> 改成 <code>tel</code> 于是得到了电信节点的 IP。</p>
-<p>现在写一个两句话的 js 脚本来生成一份针对 <code>a{1-2000}.phobos.apple.com</code> 的加速列表。</p>
+<p>现在写一个两句话的 js 脚本来生成一份针对 <code>a{1-2000}.phobos.apple.com</code> 的加速列表(废话这种东西能手写吗要累死啦)，以达到尽可能将电信、联通的节点混在一起，保证各个 ISP 用户的下载速度。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
 3

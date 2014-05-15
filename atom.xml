@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shine on the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-05-15T14:11:00.819Z</updated>
+  <updated>2014-05-15T14:25:05.700Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.phoenixlzx.com/2014/05/15/accelerate-apple-services-in-cn/"/>
     <id>http://blog.phoenixlzx.com/2014/05/15/accelerate-apple-services-in-cn/</id>
     <published>2014-05-15T13:57:19.000Z</published>
-    <updated>2014-05-15T14:09:43.000Z</updated>
+    <updated>2014-05-15T14:24:43.000Z</updated>
     <content type="html"><![CDATA[<p>偶然看到<a href="https://plus.google.com/105938465531761409080/posts/3EXLAUerxMD" target="_blank">雅诗的po</a> 才发觉自己 DNS 的 Apple 服务加速已经几乎不能用了，速度非常慢。倒是挺奇怪的，因为自己做的 DNS 服务器对于整个 Apple 域的上游都是 V2EX DNS，难道是 V2EX DNS 出问题了？</p>
 <p>总之先不管那些。现在来简单做一份 Apple 服务加速的配置。</p>
 <p>稍微 Google 下 Apple 的服务地址，目前获得的地址如下：</p>
@@ -45,7 +45,7 @@ itunes<span class="preprocessor">.apple</span><span class="preprocessor">.ccgslb
 </pre></td></tr></table></figure>
 
 <p>然后根据 114DNS 和 Google DNS 综合查询以上地址的 IP。顺便发现地址里有 <code>cnc</code>, <code>cncssr</code> 这样的关键字，于是正好尝试把 <code>cnc</code> 改成 <code>tel</code> 于是得到了电信节点的 IP。</p>
-<p>现在写一个两句话的 js 脚本来生成一份针对 <code>a{1-2000}.phobos.apple.com</code> 的加速列表。</p>
+<p>现在写一个两句话的 js 脚本来生成一份针对 <code>a{1-2000}.phobos.apple.com</code> 的加速列表(废话这种东西能手写吗要累死啦)，以达到尽可能将电信、联通的节点混在一起，保证各个 ISP 用户的下载速度。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
 2
 3
