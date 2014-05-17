@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shine on the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-05-15T14:25:05.700Z</updated>
+  <updated>2014-05-17T08:44:05.242Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -13,6 +13,36 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[修复 Arch Rollback Machine 磁盘占用]]></title>
+    <link href="http://blog.phoenixlzx.com/2014/05/17/repo-arm-disk-rescue-and-resize/"/>
+    <id>http://blog.phoenixlzx.com/2014/05/17/repo-arm-disk-rescue-and-resize/</id>
+    <published>2014-05-17T07:59:48.000Z</published>
+    <updated>2014-05-17T08:43:45.000Z</updated>
+    <content type="html"><![CDATA[<p>最近发现 downgrade 失效了，降级啥包都是直接错误退出。然后排查的时候发现是 Arch Rollback Machine 挂了，原因是——磁盘不足。</p>
+<p>检查后发现 pm2 的日志有 7G，850天前的包有5000多个，365天内的包有10万余，磁盘已经被吃得满满当当。</p>
+<p>日志好说，因为没啥特别有用的东西也不用拿来做分析，直接删掉就好。Felix 也把 850 天前的包全部删干净了。不过再次检查的时候 <code>df -h</code> 显示依旧是磁盘被吃满的，而 <code>df -ih</code> 显示 inode 占用没有问题。猫怀疑是有文件句柄还开着，但是把所有可能的进程杀掉之后依旧没有变化，排除。另外一个现象是文件删除进程完成后过了一段时间磁盘开始有少量空闲空间了，可能是磁盘缓存…? </p>
+<p>于是靠着这空出来的 900M 多点的空间执行了几个操作：把有 HTTP flood 漏洞的 Node.js 0.10.16 升级到最新版 0.10.28，将包同步的 cronjob 降低到每天执行一次，压缩旧的 NGINX 日志。</p>
+<p>以及用户一直要求的包归档功能，实际上是已经有了的，但是并没通过 NGINX 配置来实现(Pia!&lt;(=ｏ ‵-′)ノ☆猫) 所以准备把归档功能写到 API 服务端里。因为之前很有预见性的同步的时候把每天的包数据库按照 <code>/year/month/day/repo</code> 的结构保存起来(然后这部分的数据库文件就有 30G！)，所以用户按照这个路径来请求包数据库的时候直接把对应的数据库文件丢给客户端，请求包文件的时候则直接从包目录里丢过去。这样的话其实从一个较早的时间结构最后请求一个较新的包文件也能拿到….不过这个不是问题，因为包归档给 pacman 用的话，有哪些包还是 pacman 要读数据库的。</p>
+<p>包归档的 index 确实花了不少时间，目前的实现貌似也不很好，虽然貌似还挺快的，但是也挺吃硬盘的…而且一连好几次手残敲错了东西、少加了分隔符、加了冗余的配置变量…. 总之就是爆肝熬夜的效率超级差，4点多基本上没问题的时候已经能感觉到身体很不舒服了…</p>
+<p>然后是一觉睡到第二天中午。觅食归来给 A.R.M 的 KVM 虚拟机硬盘增加了 100G。执行 <code>resize2fs</code> 的时候报错说已经达到最大空间，删掉 swap 之后依旧。接下来干了一件很作死的事情——把所有分区删掉了，然后按照原来的分区方案重建了新的分区。Reboot 之后 lsblk 是对了，但是 df -h 依旧是原来的分区。一叶说是 resize 没成功，要进 LiveCD 里面 resize2fs。不过我没镜像… 按照一叶的建议挂上 VNC 进 recovery 然后 fsck，再正常进系统执行 <code>resize2fs</code>，成功。</p>
+<p>回过神来的时候发现这种作死的行为我居然手都没抖一下 = = 几百G的数据呐…</p>
+<p>晚上还要做字幕，再去休息下好了…</p>
+]]></content>
+    
+    
+      <category term="Server" scheme="http://blog.phoenixlzx.com/tags/Server/"/>
+    
+      <category term="Ubuntu" scheme="http://blog.phoenixlzx.com/tags/Ubuntu/"/>
+    
+      <category term="Linux" scheme="http://blog.phoenixlzx.com/tags/Linux/"/>
+    
+      <category term="Filesystem" scheme="http://blog.phoenixlzx.com/tags/Filesystem/"/>
+    
+      <category term="Linux" scheme="http://blog.phoenixlzx.com/categories/Linux/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[为国内用户加速 Apple 服务]]></title>
@@ -2334,27 +2364,6 @@ n <span class="number">0.10</span><span class="number">.25</span>
 <p>每次都是罗嗦一大堆没用的东西.. 别看咱现在写作苦手，<del>咱小时候的作文还是上过报纸的</del>。现在代码敲多了，技术文档读多了，动漫看多了，越来越多的习惯于用简短的英语或日语来描述事物、动作或感情…汉语的使用能力已经比壕桥好不哪去了…壕桥的错别字连天估计我也不知道还能对他233到什么时候。——比如上句话你听懂了么？</p>
 <p>嘛。日子总是这么一天天的过，在这里给大家拜新年的说～</p>
 <p><img src="http://blog.phoenixlzx.com/static/img/posts/2014-01-31-pixiv40813042.jpg" alt="HAPPY SPRING FESTIVAL"></p>
-]]></content>
-    
-    
-      <category term="Life" scheme="http://blog.phoenixlzx.com/categories/Life/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[「鹦鹉螺号」退役]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/01/29/nautilus-retired/"/>
-    <id>http://blog.phoenixlzx.com/2014/01/29/nautilus-retired/</id>
-    <published>2014-01-29T04:22:59.000Z</published>
-    <updated>2014-01-29T05:03:11.000Z</updated>
-    <content type="html"><![CDATA[<p>收到了ResellerClub的来信。</p>
-<p><a href="http://www.seainsight.me" target="_blank">鹦鹉螺号</a> 域名就要到期了。2012年2月19日注册，到现在也就是2年的时间。170余篇文章，说实话没多少是自己的。</p>
-<p>自从加入 ResellerClub 以来，又做了Hexonet的代理。域名、数字证书、服务器，基本上想做个网站或者什么Web服务，找我可以一条龙搞定了。总有人这么说，你赚了不少钱吧。每到这时候我都只能摇头苦笑——扣掉各种手续费，一个域名一年有3块5块的利润就很不错了…</p>
-<p>2013年下半年到2014年初的财务状况一直比较紧张。因为不满学校食堂的猪饲料(一盘菜可以倒出一锅油，还不是啥好油)，一直带着jojo在外面吃，每天光吃饭就要花掉几十块大洋。服务器机房网络总是抽风，无奈在猫菊苣的各种诱惑下一狠心买了服务器托管到MultaCOM机房。Minecraft服务器和二小姐的合并又折腾了好一阵，买服务器、寄去托管什么的。还得感谢happyaron童鞋省掉了我一大笔托管的费用。萌DNS最一开始也只是想自己弄两台NS服务器用用，后来慢慢变成了多用户的域名管理平台我还专门写了个管理员页面…所以服务器也不能含糊了，于是一年2k的服务器费用，加上域名和证书的好几百。学期结束的时候突然心血来潮..额，其实也不算，因为X201i的性能是在太差了，<del>蓝光都带不动的说</del> 更别提Minecraft了.. 于是又破费入了一块240G Intel 530 SSD，一块1600×900的14寸高分屏，一只Express转USB3.0的扩展卡准备回家升级T420来用，加起来又近2k了吧。</p>
-<p>为什么非得做不折腾会死星人呢…不作死就不会死，我怎么就不明白这个道理。何弃疗？</p>
-<p>(貌似「何弃疗」这词还是从我母校高中冒出来的？如果我还在郑集中学估计也会放弃治疗参加高考的吧..？)</p>
-<p>所以这一段时间以来都很累…博客只适合记录生活和折腾经历，专门拿来做知识库备忘什么的还是用一个简单的Wiki吧。纠结了一晚，最后还是决定，「鹦鹉螺号」已经没有继续存在的价值了。它的主人已经没有力气再驾驶它驰骋汪洋了，是时候让它停靠休息了。</p>
-<p>虽然只写了一点点，不过还是谨以此文纪念陪伴我2年的鹦鹉螺号吧。(喂！</p>
 ]]></content>
     
     

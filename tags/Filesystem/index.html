@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     
-    <title>第 3 页 | Phoenix&#39;s island</title>
+    <title>Filesystem | Phoenix&#39;s island</title>
     <meta name="author" content="Phoenix Nemo">
     
     <meta name="description" content="Phoenix&#39;s Blog">
@@ -63,7 +63,11 @@
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article class="post">
+<h2 class="archive-title tag">Filesystem</h2>
+
+
+  
+    <article class="post">
   
     <div class="gallery">
   <div class="photoset">
@@ -81,24 +85,25 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-01-29T04:22:59.000Z"><a href="/2014/01/29/nautilus-retired/">2014-01-29</a></time>
+        <time datetime="2014-05-17T07:59:48.000Z"><a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">2014-05-17</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/01/29/nautilus-retired/">「鹦鹉螺号」退役</a></h1>
+    <h1 class="title"><a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">修复 Arch Rollback Machine 磁盘占用</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>收到了ResellerClub的来信。</p>
-<p><a href="http://www.seainsight.me" target="_blank">鹦鹉螺号</a> 域名就要到期了。2012年2月19日注册，到现在也就是2年的时间。170余篇文章，说实话没多少是自己的。</p>
-<p>自从加入 ResellerClub 以来，又做了Hexonet的代理。域名、数字证书、服务器，基本上想做个网站或者什么Web服务，找我可以一条龙搞定了。总有人这么说，你赚了不少钱吧。每到这时候我都只能摇头苦笑——扣掉各种手续费，一个域名一年有3块5块的利润就很不错了…</p>
-<p>2013年下半年到2014年初的财务状况一直比较紧张。因为不满学校食堂的猪饲料(一盘菜可以倒出一锅油，还不是啥好油)，一直带着jojo在外面吃，每天光吃饭就要花掉几十块大洋。服务器机房网络总是抽风，无奈在猫菊苣的各种诱惑下一狠心买了服务器托管到MultaCOM机房。Minecraft服务器和二小姐的合并又折腾了好一阵，买服务器、寄去托管什么的。还得感谢happyaron童鞋省掉了我一大笔托管的费用。萌DNS最一开始也只是想自己弄两台NS服务器用用，后来慢慢变成了多用户的域名管理平台我还专门写了个管理员页面…所以服务器也不能含糊了，于是一年2k的服务器费用，加上域名和证书的好几百。学期结束的时候突然心血来潮..额，其实也不算，因为X201i的性能是在太差了，<del>蓝光都带不动的说</del> 更别提Minecraft了.. 于是又破费入了一块240G Intel 530 SSD，一块1600×900的14寸高分屏，一只Express转USB3.0的扩展卡准备回家升级T420来用，加起来又近2k了吧。</p>
-<p>为什么非得做不折腾会死星人呢…不作死就不会死，我怎么就不明白这个道理。何弃疗？</p>
-<p>(貌似「何弃疗」这词还是从我母校高中冒出来的？如果我还在郑集中学估计也会放弃治疗参加高考的吧..？)</p>
-<p>所以这一段时间以来都很累…博客只适合记录生活和折腾经历，专门拿来做知识库备忘什么的还是用一个简单的Wiki吧。纠结了一晚，最后还是决定，「鹦鹉螺号」已经没有继续存在的价值了。它的主人已经没有力气再驾驶它驰骋汪洋了，是时候让它停靠休息了。</p>
-<p>虽然只写了一点点，不过还是谨以此文纪念陪伴我2年的鹦鹉螺号吧。(喂！</p>
+        <p>最近发现 downgrade 失效了，降级啥包都是直接错误退出。然后排查的时候发现是 Arch Rollback Machine 挂了，原因是——磁盘不足。</p>
+<p>检查后发现 pm2 的日志有 7G，850天前的包有5000多个，365天内的包有10万余，磁盘已经被吃得满满当当。</p>
+<p>日志好说，因为没啥特别有用的东西也不用拿来做分析，直接删掉就好。Felix 也把 850 天前的包全部删干净了。不过再次检查的时候 <code>df -h</code> 显示依旧是磁盘被吃满的，而 <code>df -ih</code> 显示 inode 占用没有问题。猫怀疑是有文件句柄还开着，但是把所有可能的进程杀掉之后依旧没有变化，排除。另外一个现象是文件删除进程完成后过了一段时间磁盘开始有少量空闲空间了，可能是磁盘缓存…? </p>
+<p>于是靠着这空出来的 900M 多点的空间执行了几个操作：把有 HTTP flood 漏洞的 Node.js 0.10.16 升级到最新版 0.10.28，将包同步的 cronjob 降低到每天执行一次，压缩旧的 NGINX 日志。</p>
+<p>以及用户一直要求的包归档功能，实际上是已经有了的，但是并没通过 NGINX 配置来实现(Pia!&lt;(=ｏ ‵-′)ノ☆猫) 所以准备把归档功能写到 API 服务端里。因为之前很有预见性的同步的时候把每天的包数据库按照 <code>/year/month/day/repo</code> 的结构保存起来(然后这部分的数据库文件就有 30G！)，所以用户按照这个路径来请求包数据库的时候直接把对应的数据库文件丢给客户端，请求包文件的时候则直接从包目录里丢过去。这样的话其实从一个较早的时间结构最后请求一个较新的包文件也能拿到….不过这个不是问题，因为包归档给 pacman 用的话，有哪些包还是 pacman 要读数据库的。</p>
+<p>包归档的 index 确实花了不少时间，目前的实现貌似也不很好，虽然貌似还挺快的，但是也挺吃硬盘的…而且一连好几次手残敲错了东西、少加了分隔符、加了冗余的配置变量…. 总之就是爆肝熬夜的效率超级差，4点多基本上没问题的时候已经能感觉到身体很不舒服了…</p>
+<p>然后是一觉睡到第二天中午。觅食归来给 A.R.M 的 KVM 虚拟机硬盘增加了 100G。执行 <code>resize2fs</code> 的时候报错说已经达到最大空间，删掉 swap 之后依旧。接下来干了一件很作死的事情——把所有分区删掉了，然后按照原来的分区方案重建了新的分区。Reboot 之后 lsblk 是对了，但是 df -h 依旧是原来的分区。一叶说是 resize 没成功，要进 LiveCD 里面 resize2fs。不过我没镜像… 按照一叶的建议挂上 VNC 进 recovery 然后 fsck，再正常进系统执行 <code>resize2fs</code>，成功。</p>
+<p>回过神来的时候发现这种作死的行为我居然手都没抖一下 = = 几百G的数据呐…</p>
+<p>晚上还要做字幕，再去休息下好了…</p>
 
       
     </div>
@@ -113,65 +118,14 @@
 </article>
 
 
-
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-01-02T04:02:22.000Z"><a href="/2014/01/02/new-start/">2014-01-02</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/01/02/new-start/">再一次开始</a></h1>
   
 
-    </header>
-    <div class="entry">
-      
-        <p>换博客程序的想法早就有了。不愧是不折腾会死星人，一路从 wordpress.com 换到独立的 WordPress 再到 Jekyll，13年8月份的时候还自己写了个博客程序 /w\</p>
-<p>不过无奈自己能力不够，Node.js 写的博客程序也不是那么舒服。WordPress 看过源码之后才发现比自己想象中的复杂得多——不然也不会成为最受欢迎的 CMS+Blog 系统。</p>
-<p>前段时间 <a href="https://plus.google.com/u/0/+BobYuan/" target="_blank">+Bob Yuan</a> 来找我注册域名，我顺便推荐了 Hexo 给他。不过惭愧的是那时候我也没有用过 Hexo… 虽然很想用。2014新年当天晚上在<a href="https://plus.google.com/u/0/103175359999284392656/" target="_blank">少将</a>家和<a href="https://plus.google.com/u/0/+CeeCirno/" target="_blank">C菊</a>，<a href="https://plus.google.com/u/0/+ZhtKannagi/" target="_blank">Zht</a>，<a href="https://plus.google.com/u/0/102594404609241222783/" target="_blank">色枫铃</a>以及<a href="https://plus.google.com/u/0/117271460125855897345/" target="_blank">JOJO</a>一起看红白吃火锅，吃到开心的时候来邮件通知说 MultaCOM 机房的机器上线了要我去配置。</p>
-<p>当我搞定服务器的时候其他人都吃完收桌子了QAQ 所以只好继续帮客户迁移虚拟机。我自己的服务器也在凤凰城 SecuredServers 机房，所以这次也是顺便一起迁过来。整理了一下，除了自己写的几个 Node.js 程序，也就剩下 <a href="http://www.seainsight.me" target="_blank">鹦鹉螺号</a> 了。写了好长时间的博客，170篇文章全部被 Google 收录。<del>虽然大部分是转载的</del></p>
-<p>果然时间长了就是舍不得扔，平时拿来转载一些好玩的东西也是可以的。何况这里还有一大堆分享的文件以及 List Yo’s files 这等好用的插件在。不过还有不少其他人的 WordPress，看了一圈发现都好久不更新了——而且都是一开始写了两篇后面就再也没更新的。所以就丢在原来的服务器上不管了。至于这个博客，想来想去还是放在 Github 上。一个是 Uptime 一个是 CDN，<del>最重要的是不要钱</del></p>
-<p>于是就趁着复习周刚开始的这几天空闲把这个 Hexo 搞定吧。罗嗦了这么多，估计今天早上想写文章的思路早就不知道丢哪去了。既然有了专门的 WordPress 来做转载记录，那么这里就尽量保证原创吧～代码写了不少了不过一直没想好如何记录学到的很多经验。目测…还是需要个类似知识库的东西啊。好羡慕猫大大的<a href="http://wiki.felixc.at" target="_blank">Felix Wiki</a></p>
-<p>嗯.. 于是就这样。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-<nav id="pagination">
-  
-    <a href="/page/2/" class="alignleft prev">上一页</a>
+  <nav id="pagination">
   
   
   <div class="clearfix"></div>
-</nav></div></div>
+</nav>
+</div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
