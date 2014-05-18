@@ -81,6 +81,142 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-02-23T02:39:58.000Z"><a href="/2014/02/23/kernel-hook-auto-build-dkms-modules/">2014-02-23</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/23/kernel-hook-auto-build-dkms-modules/">自动编译 DKMS 模组的内核 HOOK</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><a href="http://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support" target="_blank">DKMS</a> 是个好东西，像我们这些喜欢自定义内核的家伙有了 DKMS 之后就不用为各种第三方的内核模组发愁了～</p>
+<p>于是也没看是不是有人做过了(基本上是有人做了吧…) 于是参照 <a href="https://aur.archlinux.org/packages/nvidia-hook/" target="_blank">nvidia-hook</a> 做了一个 <a href="https://aur.archlinux.org/packages/autodkms/" target="_blank">autodkms</a>。</p>
+<p>按照 <a href="https://wiki.archlinux.org/index.php/Dynamic_Kernel_Module_Support" target="_blank">ArchWiki</a>，自动编译所有模组的命令是：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>dkms autoinstall <span class="attribute">-k</span> NEW_KERNEL_VERSION
+</pre></td></tr></table></figure>
+
+<p>于是照葫芦画瓢写的 hook 文件 <code>/usr/lib/initcpio/install/autodkms</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="function"><span class="title">build</span></span> ()
+{
+  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span>
+  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span>
+  <span class="built_in">echo</span> <span class="string">"Build complete."</span>
+}
+
+<span class="function"><span class="title">help</span></span> ()
+{
+cat&lt;&lt;HELPEOF
+    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.
+HELPEOF
+}
+</pre></td></tr></table></figure>
+
+<p>全部源码在<a href="https://github.com/phoenixlzx/autodkms" target="_blank">这里</a> <del>其实一共就几行…</del></p>
+<p>打包好之后在 <code>/etc/mkinitcpio.conf</code> 的 <code>HOOKS</code> 最后加上 <code>autodkms</code> 就可以在更新内核的时候重新编译所有模组啦。</p>
+<p>=== 2014-03-10 更新 ===</p>
+<p>在没有装对应内核的 headers 之前脚本执行会出错——</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>Building dkms modules <span class="keyword">for</span> <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts kernel...
+<span class="keyword">Error</span>! echo
+Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at
+/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.
+<span class="keyword">Error</span>! echo
+Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at
+/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.
+Build complete.
+</pre></td></tr></table></figure>
+
+<p>但是一般升级的时候都是先装内核再装 headers 所以脚本可以完善下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="function"><span class="title">build</span></span> ()
+{
+  <span class="keyword">if</span> [ ! <span class="operator">-d</span> <span class="string">"/usr/lib/modules/<span class="variable">${KERNELVERSION}</span>/build"</span> ]; <span class="keyword">then</span>
+    <span class="built_in">echo</span> <span class="string">"You need to install or update <span class="variable">${KERNELVERSION}</span> headers before build kernel image."</span>
+    <span class="keyword">exit</span> <span class="number">1</span>
+  <span class="keyword">fi</span>
+  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span>
+  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span>
+  <span class="built_in">echo</span> <span class="string">"Build complete."</span>
+}
+
+<span class="function"><span class="title">help</span></span> ()
+{
+cat&lt;&lt;HELPEOF
+    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.
+HELPEOF
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-02-19T06:03:05.000Z"><a href="/2014/02/19/make-gif-with-ffmpeg/">2014-02-19</a></time>
       
       
@@ -1907,64 +2043,6 @@ n <span class="number">0.10</span><span class="number">.25</span>
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-01-30T16:00:00.000Z"><a href="/2014/01/31/2014-01-31/">2014-01-31</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/01/31/2014-01-31/">2014-01-31</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>于是又到了新年，貌似我的年终总结还没写(啊咧？</p>
-<p><del>于是这篇就是为了应付作业憋出来的</del></p>
-<p>今天.. 哦不，昨天开始收各种ACG向的图片了。G+上发图的不少，所以我暂时还不用去翻 Pixiv 什么的。作为一只二次元的喵星人，硬盘里没点宅文化算什么呢喵？</p>
-<p>似乎最近几天不少人在折腾 KDE。由来不清楚，总之就是有人问了关于 KDE 的问题，于是我在G+上发了一些 KDE 的截图、录屏以及一些配置什么的。慢慢发现周围越来越多的人开始问，「用xxx环境好换KDE不呢？」，「KDE能做这个么能做那个么？」，「这么多包怎么选呢？」… 等等的问题。作为KDE简体中文翻译组的成员(又来了(σ≧∀≦)σ﻿) 能帮到别人还是非常欢心的嗯。</p>
-<p>这么一来二去的自己也想开始折腾了www。KDE 的玻璃特效和二次元的风格是绝配哦～<a href="http://dimpurr.com" target="_blank">钉子</a>说，「二次元向的主题就是萌妹子+半透明+光晕」，对此我深信不疑。今天..啊昨天翻了半天找到几张还算满意的壁纸，深色壁纸真心看过头了，想要点淡色清新的w 结果发G+之后无辜的<a href="http://nya.io" target="_blank">Bob酱</a>被各种mention 2333</p>
-<p><img src="http://blog.phoenixlzx.com/static/img/posts/2014-01-31-desktop-1.jpg" alt="yua"></p>
-<p>随后翻 Zerochan 发现了一张很有味道的东方壁纸～</p>
-<p><img src="http://blog.phoenixlzx.com/static/img/posts/2014-01-31-desktop-2.jpg" alt="Hakurei Reimu"></p>
-<p>嗯决定就是这张了w 顺便去掉了一直放在左侧隐藏的面板，把快速启动的程序丢到桌面目录里。一个是快速启动不像以前那样可以自动居中了(或者说我忘记怎么设置了…) 再一个选择文本的时候容易把那个该死的面板激活弹出来… 这样桌面不显得空，而且玻璃特效、Plasma 控件位置都和壁纸相当贴合～</p>
-<p>晚上照例是不看春晚的w 和大家一起疯狂玩Minecraft。去年还准备了<a href="http://www.tudou.com/programs/view/-O34AbY1ZmQ/" target="_blank">焰火晚会</a>，今年似乎很多op都回家不方便上线了，于是就没准备什么活动。虽然 <del>红包肯定少不了的QAQ我足足发了1600个节操啊…</del> 1.7版开始 Minecraft 变得特别大，因为有了很多新的背景音乐。我倒是挺喜欢原来的那些音乐，新版音乐虽然也有味道但是一个人玩的时候太恐怖了(ಥ_ಥ)。所以一直是关掉音乐，带着耳机loop境界の比方的OST。最喜欢的是「約束の絆」和「Judgmentじゃ!」。前者是补番的时候发现这插曲相当好听，以至于在OST发售之前就在萌购上预定了，拿到手之后一直在loop。后者是扫盘发到u2上，有人反馈这首音轨抓取有错误，我才去重新听的。说实话那时候我只听了「約束の絆」，因为好听到不想听其他的了。后来校正的时候发现「Judgmentじゃ!」也很好听，爱酱的声音完全变了啊！超级带感的说。专辑里还有其他一些音乐，听的时候会莫名难过，也许是第一次看完境界の彼方的时候哭了一晚上？</p>
-<p>前段时间又看了「のんのんびより」，真是越来越羡慕在日本的乡村生活了… 顺便说一句，「のんのんびより」的OP和ED也非常好听哦～(｢･ω･)｢</p>
-<p><del>啊我去终于算是快憋完了</del></p>
-<p>每次都是罗嗦一大堆没用的东西.. 别看咱现在写作苦手，<del>咱小时候的作文还是上过报纸的</del>。现在代码敲多了，技术文档读多了，动漫看多了，越来越多的习惯于用简短的英语或日语来描述事物、动作或感情…汉语的使用能力已经比壕桥好不哪去了…壕桥的错别字连天估计我也不知道还能对他233到什么时候。——比如上句话你听懂了么？</p>
-<p>嘛。日子总是这么一天天的过，在这里给大家拜新年的说～</p>
-<p><img src="http://blog.phoenixlzx.com/static/img/posts/2014-01-31-pixiv40813042.jpg" alt="HAPPY SPRING FESTIVAL"></p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -2020,7 +2098,7 @@ n <span class="number">0.10</span><span class="number">.25</span>
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>4</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>5</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>7</small></li>
   
@@ -2045,6 +2123,10 @@ n <span class="number">0.10</span><span class="number">.25</span>
   <ul class="entry">
     
       <li>
+        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+      </li>
+    
+      <li>
         <a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">修复 Arch Rollback Machine 磁盘占用</a>
       </li>
     
@@ -2058,10 +2140,6 @@ n <span class="number">0.10</span><span class="number">.25</span>
     
       <li>
         <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
-      </li>
-    
-      <li>
-        <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
       </li>
     
   </ul>

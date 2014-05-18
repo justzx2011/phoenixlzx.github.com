@@ -81,6 +81,118 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-05-18T19:18:20.000Z"><a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">2014-05-19</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>又是熬夜干活。</p>
+<p>之前在 StackOverflow 上看到过 <a href="http://stackoverflow.com/questions/5050265/javascript-nodejs-is-array-foreach-asynchronous" target="_blank">Array.forEach 是同步(阻塞)的</a>，但是实际使用的时候，特别是我在写 Node.js 程序的时候几乎没感觉到过它的阻塞—— forEach 或者其他 for 循环之后的 callback 从来都是被立即调用，没有等待整个循环执行完。&lt;== 这个命题是个假命题，下面会说明。</p>
+<p>今天又一次掉进异步的坑里才发现 for 循环确实是阻塞的。至于为何它后面的回调函数会立即被调用，原因是 for 循环里有异步方法。整个循环不会等待异步方法结束，而是直接进入下一个循环，所以它 <strong>看起来</strong> 像是异步的，后面的回调函数「立即」被调用了。<a href="http://stackoverflow.com/questions/21184340/async-for-loop-in-node-js" target="_blank">StackOverflow</a> 上有更详细的例子和说明。</p>
+<p>不过如果是数组，那么直接使用 <a href="https://github.com/caolan/async" target="_blank">async</a> 替代原生的 forEach 和其他 for 语句即可简单解决。但是问题出在我这里的情况是要用 <code>for in</code> 语句处理 Object，虽说 Javascript 里 Object 和 Array 非常相似但是毕竟没有 Array 那些好用的方法，在这种情况下也不方便使用 prototype 来给我的 object 新增类似方法。二小姐给出的解决方案是手动设置计数器，获得 object 长度的办法是使用 <code>Object.keys(obj).length</code>。</p>
+<p><strong>注意</strong> <code>Object.keys(obj).length</code> 并不一定是要循环的次数，具体需要看 Object 的结构。我这里就是解析 DOM 得到的 Object 所以有额外的东西，<code>length - 3</code> 才是需要的结果。</p>
+<p>代码写出来大概是这个样子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span><span class="params">(obj, callback)</span> {</span>
+
+    <span class="keyword">var</span> tasks = <span class="built_in">Object</span>.keys(obj).length;
+    
+    <span class="keyword">var</span> arr = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>];
+    
+    <span class="keyword">for</span> (key <span class="keyword">in</span> obj) {
+	
+	tasks--;
+	
+	async.eachSeries(arr, someFunc(n, cb) {
+	
+	    <span class="comment">// do stuff here.</span>
+	    
+	    cb();
+	
+	}, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> {</span>
+	
+	    <span class="comment">// operations after array iteration completed.</span>
+	    
+	    <span class="keyword">if</span> (tasks === <span class="number">0</span>) {
+	    
+		<span class="comment">// All tasks done, return to callback</span>
+		<span class="keyword">return</span> callback();
+	    
+	    }
+	    
+	});
+    }
+}
+</pre></td></tr></table></figure>
+
+<p>在最后 <code>callback</code> 的时候如果不写 <code>return</code> 就会失效。我还没查原因，因为已经累得不行了… 所以(当回伸手党)如果哪位童鞋知道的麻烦告知… 有灵梦的节操相送哦 &gt;///&lt;</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-05-17T07:59:48.000Z"><a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">2014-05-17</a></time>
       
       
@@ -894,142 +1006,6 @@ addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-02-23T02:39:58.000Z"><a href="/2014/02/23/kernel-hook-auto-build-dkms-modules/">2014-02-23</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/02/23/kernel-hook-auto-build-dkms-modules/">自动编译 DKMS 模组的内核 HOOK</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p><a href="http://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support" target="_blank">DKMS</a> 是个好东西，像我们这些喜欢自定义内核的家伙有了 DKMS 之后就不用为各种第三方的内核模组发愁了～</p>
-<p>于是也没看是不是有人做过了(基本上是有人做了吧…) 于是参照 <a href="https://aur.archlinux.org/packages/nvidia-hook/" target="_blank">nvidia-hook</a> 做了一个 <a href="https://aur.archlinux.org/packages/autodkms/" target="_blank">autodkms</a>。</p>
-<p>按照 <a href="https://wiki.archlinux.org/index.php/Dynamic_Kernel_Module_Support" target="_blank">ArchWiki</a>，自动编译所有模组的命令是：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>dkms autoinstall <span class="attribute">-k</span> NEW_KERNEL_VERSION
-</pre></td></tr></table></figure>
-
-<p>于是照葫芦画瓢写的 hook 文件 <code>/usr/lib/initcpio/install/autodkms</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre><span class="function"><span class="title">build</span></span> ()
-{
-  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span>
-  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span>
-  <span class="built_in">echo</span> <span class="string">"Build complete."</span>
-}
-
-<span class="function"><span class="title">help</span></span> ()
-{
-cat&lt;&lt;HELPEOF
-    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.
-HELPEOF
-}
-</pre></td></tr></table></figure>
-
-<p>全部源码在<a href="https://github.com/phoenixlzx/autodkms" target="_blank">这里</a> <del>其实一共就几行…</del></p>
-<p>打包好之后在 <code>/etc/mkinitcpio.conf</code> 的 <code>HOOKS</code> 最后加上 <code>autodkms</code> 就可以在更新内核的时候重新编译所有模组啦。</p>
-<p>=== 2014-03-10 更新 ===</p>
-<p>在没有装对应内核的 headers 之前脚本执行会出错——</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="code"><pre>Building dkms modules <span class="keyword">for</span> <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts kernel...
-<span class="keyword">Error</span>! echo
-Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at
-/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.
-<span class="keyword">Error</span>! echo
-Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at
-/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.
-Build complete.
-</pre></td></tr></table></figure>
-
-<p>但是一般升级的时候都是先装内核再装 headers 所以脚本可以完善下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-</pre></td><td class="code"><pre><span class="function"><span class="title">build</span></span> ()
-{
-  <span class="keyword">if</span> [ ! <span class="operator">-d</span> <span class="string">"/usr/lib/modules/<span class="variable">${KERNELVERSION}</span>/build"</span> ]; <span class="keyword">then</span>
-    <span class="built_in">echo</span> <span class="string">"You need to install or update <span class="variable">${KERNELVERSION}</span> headers before build kernel image."</span>
-    <span class="keyword">exit</span> <span class="number">1</span>
-  <span class="keyword">fi</span>
-  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span>
-  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span>
-  <span class="built_in">echo</span> <span class="string">"Build complete."</span>
-}
-
-<span class="function"><span class="title">help</span></span> ()
-{
-cat&lt;&lt;HELPEOF
-    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.
-HELPEOF
-</pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -1083,7 +1059,7 @@ HELPEOF
   
     <li><a href="/categories/Network/">Network</a><small>2</small></li>
   
-    <li><a href="/categories/Node.js/">Node.js</a><small>4</small></li>
+    <li><a href="/categories/Node.js/">Node.js</a><small>5</small></li>
   
     <li><a href="/categories/Notes/">Notes</a><small>7</small></li>
   
@@ -1108,6 +1084,10 @@ HELPEOF
   <ul class="entry">
     
       <li>
+        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+      </li>
+    
+      <li>
         <a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">修复 Arch Rollback Machine 磁盘占用</a>
       </li>
     
@@ -1121,10 +1101,6 @@ HELPEOF
     
       <li>
         <a href="/2014/04/28/sublive-live-subtitle-for-local-players/">SubLive: 本地播放器的弹幕 API 服务器</a>
-      </li>
-    
-      <li>
-        <a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a>
       </li>
     
   </ul>
