@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shine on the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-05-18T19:49:54.714Z</updated>
+  <updated>2014-05-18T19:57:34.105Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.phoenixlzx.com/2014/05/19/for-loop-in-async-function-with-async-in-it/"/>
     <id>http://blog.phoenixlzx.com/2014/05/19/for-loop-in-async-function-with-async-in-it/</id>
     <published>2014-05-18T19:18:20.000Z</published>
-    <updated>2014-05-18T19:48:59.000Z</updated>
+    <updated>2014-05-18T19:57:09.000Z</updated>
     <content type="html"><![CDATA[<p>又是熬夜干活。</p>
 <p>之前在 StackOverflow 上看到过 <a href="http://stackoverflow.com/questions/5050265/javascript-nodejs-is-array-foreach-asynchronous" target="_blank">Array.forEach 是同步(阻塞)的</a>，但是实际使用的时候，特别是我在写 Node.js 程序的时候几乎没感觉到过它的阻塞—— forEach 或者其他 for 循环之后的 callback 从来都是被立即调用，没有等待整个循环执行完。&lt;== 这个命题是个假命题，下面会说明。</p>
 <p>今天又一次掉进异步的坑里才发现 for 循环确实是阻塞的。至于为何它后面的回调函数会立即被调用，原因是 for 循环里有异步方法。整个循环不会等待异步方法结束，而是直接进入下一个循环，所以它 <strong>看起来</strong> 像是异步的，后面的回调函数「立即」被调用了。<a href="http://stackoverflow.com/questions/21184340/async-for-loop-in-node-js" target="_blank">StackOverflow</a> 上有更详细的例子和说明。</p>
@@ -88,7 +88,7 @@
 }
 </pre></td></tr></table></figure>
 
-<p>在最后 <code>callback</code> 的时候如果不写 <code>return</code> 就会失效。我还没查原因，因为已经累得不行了… 所以(当回伸手党)如果哪位童鞋知道的麻烦告知… 有灵梦的节操相送哦 &gt;///&lt;</p>
+<p>判断的语句其实也可以放在 <code>async.eachSeries</code> 之后，这样可以明显减少判断的计算(虽然那点计算不算啥) 但是也有可能会在没等待最后一次 async 执行结束的时候就返回了，所以保险起见还是多花点处理器来保证全部任务执行完。以及在最后 <code>callback</code> 的时候如果不写 <code>return</code> 就会失效。我还没查原因，因为已经累得不行了… 所以(当回伸手党)如果哪位童鞋知道的麻烦告知… 有灵梦的节操相送哦 &gt;///&lt;</p>
 ]]></content>
     
     
